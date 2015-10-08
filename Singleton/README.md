@@ -1,15 +1,16 @@
 单例模式
 ========
-[EnumSingleton]: /Singleton/src/main/java/tykkidream/learning/designpatterns/singleton/EnumSingleton "EnumSingleton.java"
-[HungrySingleton]: /Singleton/src/main/java/tykkidream/learning/designpatterns/singleton/HungrySingleton "HungrySingleton.java"
-[InternalSingleton]: /Singleton/src/main/java/tykkidream/learning/designpatterns/singleton/InternalSingleton "InternalSingleton.java"
-[LazySingleton]: /Singleton/src/main/java/tykkidream/learning/designpatterns/singleton/LazySingleton "LazySingleton.java"
-[LockSingleton]: /Singleton/src/main/java/tykkidream/learning/designpatterns/singleton/LockSingleton "LockSingleton.java"
+
+[EnumSingleton]: ./src/main/java/tykkidream/learning/designpatterns/singleton/EnumSingleton.java "EnumSingleton.java"
+[HungrySingleton]: ./src/main/java/tykkidream/learning/designpatterns/singleton/HungrySingleton.java "HungrySingleton.java"
+[InternalSingleton]: ./src/main/java/tykkidream/learning/designpatterns/singleton/InternalSingleton.java "InternalSingleton.java"
+[LazySingleton]: ./src/main/java/tykkidream/learning/designpatterns/singleton/LazySingleton.java "LazySingleton.java"
+[LockSingleton]: ./src/main/java/tykkidream/learning/designpatterns/singleton/LockSingleton.java "LockSingleton.java"
 
 有五种写法：
 
-1. 懒汉（[EnumSingleton] [EnumSingleton]）
+1. 懒汉（[LazySingleton] [LazySingleton]）
 2. 恶汉（[HungrySingleton] [HungrySingleton]）
-3. 双重校验锁（[InternalSingleton] [InternalSingleton]）
-4. 静态内部类（[LazySingleton] [LazySingleton]）
-5. 枚举（[LockSingleton] [LockSingleton]）
+3. 双重校验锁（[LockSingleton] [LockSingleton]）
+4. 静态内部类（[InternalSingleton] [InternalSingleton]）
+5. 枚举（[EnumSingleton] [EnumSingleton]）
