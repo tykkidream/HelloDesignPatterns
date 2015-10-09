@@ -18,6 +18,7 @@
 
 	<modules>
 		<module>Singleton</module>
+        <module>State</module>
     </modules>
 
 	<dependencies>
