@@ -62,7 +62,7 @@ public abstract class ReentrantHolder<T> {
 
         T parentData = null;
 
-        if (parent != null) {
+         if (parent != null) {
             reentrantLayer = parent.reentrantLayer + 1;
             parentData = parent.getData();
         }

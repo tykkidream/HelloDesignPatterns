@@ -12,6 +12,7 @@ public class Main {
 			businessA();
 			businessB();
 			businessC();
+			businessD();
 
 			return null;
 		});
@@ -60,6 +61,14 @@ public class Main {
 
 		holder.process(() -> {
 			System.out.println("执行业务 C！");
+		});
+	}
+
+	public static void businessD() {
+		TransactionReentrantHolder holder = new TransactionReentrantHolder(service);
+
+		holder.process(() -> {
+			System.out.println("执行业务 D！");
 		});
 	}
 }

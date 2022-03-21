@@ -13,7 +13,22 @@ public class TransactionReentrantService implements ReentrantService<Transaction
 			uuid = parentData.uuid;
 		}
 
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + transactionData.uuid + " reentrantLayer = " + reentrantLayer + " reentrantNo = " + reentrantNo + " parentUUID = " + uuid);
+		StringBuilder log = new StringBuilder(">>>>>>>>>>>>>>>>>>>>");
+
+		for (int i = 0; i < reentrantLayer; i++) {
+			log.append(">>>>>>>>>>>>>>>>>>>>");
+		}
+
+		log.append(" ");
+		log.append(transactionData.uuid);
+		log.append(" reentrantLayer = ");
+		log.append(reentrantLayer);
+		log.append(" reentrantNo = ");
+		log.append(reentrantNo);
+		log.append(" parentUUID = ");
+		log.append(uuid);
+
+		System.out.println(log.toString());
 
 		return transactionData;
 	}
@@ -26,6 +41,21 @@ public class TransactionReentrantService implements ReentrantService<Transaction
 			uuid = parentData.uuid;
 		}
 
-		System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  " + transactionData.uuid + " reentrantLayer = " + reentrantLayer + " reentrantNo = " + reentrantNo + " parentUUID = " + uuid);
+		StringBuilder log = new StringBuilder("<<<<<<<<<<<<<<<<<<<<");
+
+		for (int i = 0; i < reentrantLayer; i++) {
+			log.append("<<<<<<<<<<<<<<<<<<<<");
+		}
+
+		log.append(" ");
+		log.append(transactionData.uuid);
+		log.append(" reentrantLayer = ");
+		log.append(reentrantLayer);
+		log.append(" reentrantNo = ");
+		log.append(reentrantNo);
+		log.append(" parentUUID = ");
+		log.append(uuid);
+
+		System.out.println(log.toString());
 	}
 }
