@@ -10,9 +10,9 @@ public abstract class ReentrantHolder<T> {
         }
     };
 
-    private final ThreadLocal<ReentrantHolder> reentrantHolder;
+    private final ThreadLocal<ReentrantHolder<T>> reentrantHolder;
 
-    private ReentrantHolder oldReentrantHolder;
+    private ReentrantHolder<T> parent;
 
     private ReentrantService<T> reentrantService;
 
@@ -22,12 +22,12 @@ public abstract class ReentrantHolder<T> {
 
     private int reentrantNo = 0;
 
-    public ReentrantHolder(ThreadLocal<ReentrantHolder> reentrantHolder, ReentrantService reentrantService) {
+    public ReentrantHolder(ThreadLocal<ReentrantHolder<T>> reentrantHolder, ReentrantService<T> reentrantService) {
         this.reentrantHolder = reentrantHolder;
         this.reentrantService = reentrantService;
     }
 
-    public ReentrantHolder currentReentrantHolder() {
+    public ReentrantHolder<T> currentReentrantHolder() {
         return reentrantHolder.get();
     }
 
@@ -43,7 +43,7 @@ public abstract class ReentrantHolder<T> {
         }
     }
 
-    public <T> T process(Callable<T> callable) {
+    public <R> R process(Callable<R> callable) {
         bindThread();
 
         try {
@@ -56,48 +56,53 @@ public abstract class ReentrantHolder<T> {
     }
 
     public void bindThread() {
-        oldReentrantHolder = reentrantHolder.get();
+        parent = reentrantHolder.get();
 
         reentrantHolder.set(this);
 
-        if (oldReentrantHolder != null) {
-            reentrantLayer = oldReentrantHolder.reentrantLayer + 1;
+        T parentData = null;
+
+        if (parent != null) {
+            reentrantLayer = parent.reentrantLayer + 1;
+            parentData = parent.getData();
         }
 
         reentrantNo = counter.get().incrementAndGet();
 
-        data = reentrantService.bindThread(reentrantLayer, reentrantNo);
+        data = reentrantService.bindThread(reentrantLayer, reentrantNo, parentData);
     }
 
     public void restoreThread() {
-        reentrantHolder.set(oldReentrantHolder);
+        reentrantHolder.set(parent);
 
-        if (oldReentrantHolder != null) {
-            reentrantLayer = oldReentrantHolder.reentrantLayer - 1;
+        T parentData = null;
+
+        if (parent != null) {
+            parentData = parent.getData();
         }
 
-        reentrantService.restoreThread(data);
+        reentrantService.restoreThread(reentrantLayer, reentrantNo, data, parentData);
 
         data = null;
     }
 
     /* •••••••••••••••••••••••••••••••••••••••装••订••线••内••禁••止••作••答••否••则••记••零••分••••••••••••••••••••••••••••••••••••••• */
 
-    public ReentrantHolder getOldReentrantHolder() {
-        return oldReentrantHolder;
+    public ReentrantHolder<T> getParent() {
+        return parent;
     }
 
-    public void setOldReentrantHolder(ReentrantHolder oldReentrantHolder) {
-        if (oldReentrantHolder != null) {
-            this.oldReentrantHolder = oldReentrantHolder;
+    public void setParent(ReentrantHolder<T> parent) {
+        if (parent != null) {
+            this.parent = parent;
         }
     }
 
-    public ReentrantService getReentrantService() {
+    public ReentrantService<T> getReentrantService() {
         return reentrantService;
     }
 
-    public void setReentrantService(ReentrantService reentrantService) {
+    public void setReentrantService(ReentrantService<T> reentrantService) {
         if (reentrantService != null) {
             this.reentrantService = reentrantService;
         }
