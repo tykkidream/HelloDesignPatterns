@@ -1,8 +1,14 @@
 package hellodesignpatterns.reentrant;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.Callable;
 
 public abstract class ReentrantHolder<T> {
+    private static final Logger logger = LoggerFactory.getLogger(ReentrantHolder.class);
+
     private static final ThreadLocal<Counter> counter = new ThreadLocal<Counter>() {
         @Override
         protected Counter initialValue() {
@@ -21,6 +27,8 @@ public abstract class ReentrantHolder<T> {
     private int reentrantLayer = 0;
 
     private int reentrantNo = 0;
+
+    private boolean boundThread = false;
 
     public ReentrantHolder(ThreadLocal<ReentrantHolder<T>> reentrantHolder, ReentrantService<T> reentrantService) {
         this.reentrantHolder = reentrantHolder;
@@ -56,34 +64,73 @@ public abstract class ReentrantHolder<T> {
     }
 
     public void bindThread() {
-        parent = reentrantHolder.get();
+        try {
+            if (boundThread) {
+                return;
+            }
 
-        reentrantHolder.set(this);
+            boundThread = true;
 
-        T parentData = null;
+            parent = reentrantHolder.get();
 
-         if (parent != null) {
-            reentrantLayer = parent.reentrantLayer + 1;
-            parentData = parent.getData();
+            reentrantHolder.set(this);
+
+            T parentData = null;
+
+            if (parent != null) {
+                reentrantLayer = parent.reentrantLayer + 1;
+                parentData = parent.getData();
+            }
+
+            reentrantNo = counter.get().incrementAndGet();
+
+            data = reentrantService.bindThread(reentrantLayer, reentrantNo, parentData);
+        } catch (Throwable throwable) {
+            if (logger.isErrorEnabled()) {
+                logger.error(throwable.getMessage(), throwable);
+            }
+
+            enforceRestoreThread();
         }
-
-        reentrantNo = counter.get().incrementAndGet();
-
-        data = reentrantService.bindThread(reentrantLayer, reentrantNo, parentData);
     }
 
     public void restoreThread() {
-        reentrantHolder.set(parent);
+        try {
+            if (!boundThread) {
+                return;
+            }
 
-        T parentData = null;
+            reentrantHolder.set(parent);
 
-        if (parent != null) {
-            parentData = parent.getData();
+            T parentData = null;
+
+            if (parent != null) {
+                parentData = parent.getData();
+            }
+
+            reentrantService.restoreThread(reentrantLayer, reentrantNo, data, parentData);
+
+            data = null;
+            parent = null;
+            boundThread = false;
+        } catch (Throwable throwable) {
+            if (logger.isErrorEnabled()) {
+                logger.error(throwable.getMessage(), throwable);
+            }
+
+            enforceRestoreThread();
+        }
+    }
+
+    private void enforceRestoreThread() {
+        if (!boundThread) {
+            return;
         }
 
-        reentrantService.restoreThread(reentrantLayer, reentrantNo, data, parentData);
-
+        reentrantHolder.set(parent);
         data = null;
+        parent = null;
+        boundThread = false;
     }
 
     /* •••••••••••••••••••••••••••••••••••••••装••订••线••内••禁••止••作••答••否••则••记••零••分••••••••••••••••••••••••••••••••••••••• */
