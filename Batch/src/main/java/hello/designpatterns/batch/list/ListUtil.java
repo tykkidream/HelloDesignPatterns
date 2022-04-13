@@ -170,6 +170,38 @@ public class ListUtil {
 		}
 	}
 
+	public static <T> List<T> iterateRemove(List<T> datas, Predicate<T> predicate, List<T> removeList) {
+		Iterator<T> iterator = datas.iterator();
+
+		while (iterator.hasNext()) {
+			T data = iterator.next();
+
+			if (data == null) {
+				iterator.remove();
+				continue;
+			}
+
+			boolean test;
+
+			try {
+				test = predicate.test(data);
+			} catch (Throwable throwable) {
+				if (logger.isErrorEnabled()) {
+					logger.error(throwable.getMessage(), throwable);
+				}
+				test = true;
+			}
+
+			if (test) {
+				iterator.remove();
+
+				removeList.add(data);
+			}
+		}
+
+		return removeList;
+	}
+
 	public static <A, E, D> List<ThreeTuple<A, E, D>> leftJoin(AttributeList<E, A> leftList, AttributeList<D, A> rightList) {
 		return leftJoin(leftList, rightList, new LinkedList<>());
 	}
