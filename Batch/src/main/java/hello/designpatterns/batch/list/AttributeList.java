@@ -141,7 +141,7 @@ public class AttributeList<E, A> extends AbstractList<A> implements List<A>, Clo
 		}
 
 		public E root() {
-			return list.get(cursor);
+			return list.get(lastRet);
 		}
 
 		public void remove() {

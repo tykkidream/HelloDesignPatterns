@@ -182,8 +182,6 @@ public class ListUtil {
 		AttributeList<E, A>.ListItr leftIterator = leftList.iterator();
 		AttributeList<D, A>.ListItr rightIterator = rightList.iterator();
 
-		int rightIndex = 0;
-
 		while (leftIterator.hasNext()) {
 
 			A leftItemKey = leftIterator.next();
@@ -192,23 +190,17 @@ public class ListUtil {
 
 			D rightItemRoot = null;
 
-			R:
-			{
-				while (rightIterator.hasNext()) {
+			while (rightIterator.hasNext()) {
+				A rightItemKey = rightIterator.next();
 
-					A rightItemKey = rightIterator.next();
+				if (leftItemKey.equals(rightItemKey)) {
+					rightItemRoot = rightIterator.root();
 
-					if (leftItemKey.equals(rightItemKey)) {
-						rightItemRoot = rightIterator.root();
-						rightIndex = rightIterator.nextIndex();
-						break;
-					}
+					rightIterator.markRingStartingPoint();
+
+					break;
 				}
-
-
 			}
-
-
 
 			result.add(new ThreeTuple<>(leftItemKey, leftItemRoot, rightItemRoot));
 		}
