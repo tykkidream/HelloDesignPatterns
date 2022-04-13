@@ -38,4 +38,14 @@ public class ListUtilTest {
 
 		System.out.println(JSON.toJSONString(result));
 	}
+
+	@Test
+	public void test2() {
+		AttributeList<Person, Long> list1 = AttributeList.build(persons1, Person::getId, Person::setId);
+		AttributeList<Person, Long> list2 = AttributeList.build(persons2, Person::getId, Person::setId);
+
+		ListUtil.leftJoin(list1, list2, Person::setRelation);
+
+		System.out.println(JSON.toJSONString(persons1));
+	}
 }

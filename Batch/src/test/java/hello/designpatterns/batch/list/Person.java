@@ -5,6 +5,8 @@ public class Person {
 
 	private String name;
 
+	private Person relation;
+
 	public Person() {
 
 	}
@@ -31,6 +33,16 @@ public class Person {
 	public void setName(String name) {
 		if (name != null) {
 			this.name = name;
+		}
+	}
+
+	public Person getRelation() {
+		return relation;
+	}
+
+	public void setRelation(Person relation) {
+		if (relation != null) {
+			this.relation = relation;
 		}
 	}
 }

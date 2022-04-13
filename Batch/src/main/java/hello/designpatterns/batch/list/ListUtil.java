@@ -207,4 +207,34 @@ public class ListUtil {
 
 		return result;
 	}
+
+	public static <A, E, D> void leftJoin(AttributeList<E, A> leftList, AttributeList<D, A> rightList, BiConsumer<E, D> attributeSetter) {
+		if (leftList == null || leftList.isEmpty() || rightList == null || rightList.isEmpty()) {
+			return;
+		}
+
+		AttributeList<E, A>.ListItr leftIterator = leftList.iterator();
+		AttributeList<D, A>.ListItr rightIterator = rightList.iterator();
+
+		while (leftIterator.hasNext()) {
+
+			A leftItemKey = leftIterator.next();
+
+			E leftItemRoot = leftIterator.root();
+
+			while (rightIterator.hasNext()) {
+				A rightItemKey = rightIterator.next();
+
+				if (leftItemKey.equals(rightItemKey)) {
+					D rightItemRoot = rightIterator.root();
+
+					attributeSetter.accept(leftItemRoot, rightItemRoot);
+
+					rightIterator.markRingStartingPoint();
+
+					break;
+				}
+			}
+		}
+	}
 }
