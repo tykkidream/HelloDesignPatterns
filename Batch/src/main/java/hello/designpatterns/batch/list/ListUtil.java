@@ -262,11 +262,11 @@ public class ListUtil {
 
 					attributeSetter.accept(leftItemRoot, rightItemRoot);
 
-					rightIterator.markRingStartingPoint();
-
 					break;
 				}
 			}
+
+			rightIterator.markRingStartingPoint();
 		}
 	}
 }
