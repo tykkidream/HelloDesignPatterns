@@ -18,7 +18,7 @@ public class AttributeList<E, A> extends AbstractList<A> implements List<A>, Clo
 		this.attributeSetter = attributeSetter;
 	}
 
-	public static <E, A> AttributeList<E, A> build(List<E> list, Function<E, A> attributeFunction, BiConsumer<E, A> attributeSetter) {
+	public static <E, A> AttributeList<E, A> wrap(List<E> list, Function<E, A> attributeFunction, BiConsumer<E, A> attributeSetter) {
 		return new AttributeList<>(list, attributeFunction, attributeSetter);
 	}
 

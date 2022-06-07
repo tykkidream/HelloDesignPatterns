@@ -24,7 +24,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test1() {
-		AttributeList<Person, Long> list = AttributeList.build(persons, Person::getId, Person::setId);
+		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
 
 		for (Long obj : list) {
 			System.out.println(obj);
@@ -34,7 +34,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test2() {
-		AttributeList<Person, String> list = AttributeList.build(persons, Person::getName, Person::setName);
+		AttributeList<Person, String> list = AttributeList.wrap(persons, Person::getName, Person::setName);
 
 		for (String obj : list) {
 			System.out.println(obj);
@@ -44,7 +44,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test3() {
-		AttributeList<Person, Long> list = AttributeList.build(persons, Person::getId, Person::setId);
+		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
 
 		ListIterator<Long> iterator = list.iterator();
 
@@ -70,7 +70,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test4() {
-		AttributeList<Person, String> list = AttributeList.build(persons, Person::getName, Person::setName);
+		AttributeList<Person, String> list = AttributeList.wrap(persons, Person::getName, Person::setName);
 
 		ListIterator<String> iterator = list.iterator();
 
@@ -95,7 +95,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test5() {
-		AttributeList<Person, Long> list = AttributeList.build(persons, Person::getId, Person::setId);
+		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
 
 		for (Object obj : list) {
 			System.out.println(obj);
@@ -127,7 +127,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test6() {
-		AttributeList<Person, Long> list = AttributeList.build(persons, Person::getId, Person::setId);
+		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
 
 		AttributeList<Person, Long>.ListItr iterator = list.iterator();
 
@@ -146,7 +146,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test7() {
-		AttributeList<Person, Long> list = AttributeList.build(persons, Person::getId, Person::setId);
+		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
 
 		AttributeList<Person, Long>.ListItr iterator = list.iterator();
 
@@ -169,7 +169,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test8() {
-		AttributeList<Person, Long> list = AttributeList.build(persons, Person::getId, Person::setId);
+		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
 
 		AttributeList<Person, Long>.ListItr iterator = list.iterator();
 
@@ -211,7 +211,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test9() {
-		AttributeList<Person, Long> list = AttributeList.build(persons, Person::getId, Person::setId);
+		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
 
 		AttributeList<Person, Long>.ListItr iterator = list.iterator();
 
@@ -262,7 +262,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test10() {
-		AttributeList<Person, Long> list = AttributeList.build(persons, Person::getId, Person::setId);
+		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
 
 		AttributeList<Person, Long>.ListItr iterator = list.iterator();
 
@@ -281,7 +281,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test11() {
-		AttributeList<Person, Long> list = AttributeList.build(persons, Person::getId, Person::setId);
+		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
 
 		AttributeList<Person, Long>.ListItr iterator = list.iterator();
 
@@ -304,7 +304,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test12() {
-		AttributeList<Person, Long> list = AttributeList.build(persons, Person::getId, Person::setId);
+		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
 
 		AttributeList<Person, Long>.ListItr iterator = list.iterator();
 
@@ -331,7 +331,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test13() {
-		AttributeList<Person, Long> list = AttributeList.build(persons, Person::getId, Person::setId);
+		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
 
 		AttributeList<Person, Long>.ListItr iterator = list.iterator();
 
@@ -364,7 +364,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test14() {
-		AttributeList<Person, Long> list = AttributeList.build(persons, Person::getId, Person::setId);
+		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
 
 		AttributeList<Person, Long>.ListItr iterator = list.iterator();
 
@@ -415,5 +415,16 @@ public class AttributeListTest {
 
 		Long previous = iterator.previous();
 		System.out.println(previous);
+	}
+
+	@Test
+	public void test15() {
+		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
+
+		AttributeList<Person, Long>.ListItr iterator = list.iterator();
+
+		while (iterator.hasNext()) {
+			iterator.next();
+		}
 	}
 }
