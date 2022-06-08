@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class AttributeListTest {
+public class WrapListTest {
 
 	private List<Person> persons;
 
@@ -26,7 +26,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test1() {
-		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
+		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
 		for (Long obj : list) {
 			System.out.println(obj);
@@ -36,7 +36,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test2() {
-		AttributeList<Person, String> list = AttributeList.wrap(persons, Person::getName, Person::setName);
+		WrapList<Person, String> list = WrapList.wrap(persons, Person::getName, Person::setName);
 
 		for (String obj : list) {
 			System.out.println(obj);
@@ -46,7 +46,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test3() {
-		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
+		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
 		ListIterator<Long> iterator = list.iterator();
 
@@ -72,7 +72,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test4() {
-		AttributeList<Person, String> list = AttributeList.wrap(persons, Person::getName, Person::setName);
+		WrapList<Person, String> list = WrapList.wrap(persons, Person::getName, Person::setName);
 
 		ListIterator<String> iterator = list.iterator();
 
@@ -97,7 +97,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test5() {
-		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
+		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
 		for (Object obj : list) {
 			System.out.println(obj);
@@ -129,9 +129,9 @@ public class AttributeListTest {
 
 	@Test
 	public void test6() {
-		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
+		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		AttributeList<Person, Long>.ListItr iterator = list.iterator();
+		WrapList<Person, Long>.ListItr iterator = list.iterator();
 
 		while (iterator.hasNext()) {
 			Long next = iterator.next();
@@ -148,9 +148,9 @@ public class AttributeListTest {
 
 	@Test
 	public void test7() {
-		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
+		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		AttributeList<Person, Long>.ListItr iterator = list.iterator();
+		WrapList<Person, Long>.ListItr iterator = list.iterator();
 
 		iterator.next();
 		iterator.next();
@@ -171,9 +171,9 @@ public class AttributeListTest {
 
 	@Test
 	public void test8() {
-		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
+		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		AttributeList<Person, Long>.ListItr iterator = list.iterator();
+		WrapList<Person, Long>.ListItr iterator = list.iterator();
 
 		iterator.next();
 		iterator.next();
@@ -213,9 +213,9 @@ public class AttributeListTest {
 
 	@Test
 	public void test9() {
-		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
+		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		AttributeList<Person, Long>.ListItr iterator = list.iterator();
+		WrapList<Person, Long>.ListItr iterator = list.iterator();
 
 		iterator.next();
 		iterator.next();
@@ -264,9 +264,9 @@ public class AttributeListTest {
 
 	@Test
 	public void test10() {
-		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
+		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		AttributeList<Person, Long>.ListItr iterator = list.iterator();
+		WrapList<Person, Long>.ListItr iterator = list.iterator();
 
 		while (iterator.hasPrevious()) {
 			Long previous = iterator.previous();
@@ -283,9 +283,9 @@ public class AttributeListTest {
 
 	@Test
 	public void test11() {
-		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
+		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		AttributeList<Person, Long>.ListItr iterator = list.iterator();
+		WrapList<Person, Long>.ListItr iterator = list.iterator();
 
 		while (iterator.hasNext()) {
 			iterator.next();
@@ -306,9 +306,9 @@ public class AttributeListTest {
 
 	@Test
 	public void test12() {
-		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
+		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		AttributeList<Person, Long>.ListItr iterator = list.iterator();
+		WrapList<Person, Long>.ListItr iterator = list.iterator();
 
 		while (iterator.hasNext()) {
 			iterator.next();
@@ -333,9 +333,9 @@ public class AttributeListTest {
 
 	@Test
 	public void test13() {
-		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
+		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		AttributeList<Person, Long>.ListItr iterator = list.iterator();
+		WrapList<Person, Long>.ListItr iterator = list.iterator();
 
 		iterator.next();
 		iterator.next();
@@ -366,9 +366,9 @@ public class AttributeListTest {
 
 	@Test
 	public void test14() {
-		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
+		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		AttributeList<Person, Long>.ListItr iterator = list.iterator();
+		WrapList<Person, Long>.ListItr iterator = list.iterator();
 
 		while (iterator.hasNext()) {
 			iterator.next();
@@ -421,7 +421,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test15() {
-		AttributeList<Person, TwoTuple<Long, String>> list = AttributeList.wrap(persons, person ->
+		WrapList<Person, TwoTuple<Long, String>> list = WrapList.wrap(persons, person ->
 			new TwoTuple<Long, String>() {
 				@Override
 				public Long getA() {
@@ -451,7 +451,7 @@ public class AttributeListTest {
 
 		System.out.println("=================================================================");
 
-		AttributeList<Person, TwoTuple<Long, String>>.ListItr iterator = list.iterator();
+		WrapList<Person, TwoTuple<Long, String>>.ListItr iterator = list.iterator();
 
 		String f2 = JSON.toJSONString(list);
 
@@ -479,7 +479,7 @@ public class AttributeListTest {
 
 	@Test
 	public void test16() {
-		AttributeList<Person, TwoTuple<Long, String>> list = AttributeList.wrap(persons, person ->
+		WrapList<Person, TwoTuple<Long, String>> list = WrapList.wrap(persons, person ->
 				new TwoTuple<Long, String>() {
 					@Override
 					public Long getA() {
@@ -509,7 +509,7 @@ public class AttributeListTest {
 
 		System.out.println("=================================================================");
 
-		AttributeList<Person, TwoTuple<Long, String>>.ListItr iterator = list.iterator();
+		WrapList<Person, TwoTuple<Long, String>>.ListItr iterator = list.iterator();
 
 		TwoTuple<Long, String> next = iterator.next();
 

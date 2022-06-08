@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public class AttributeList<E, A> extends AbstractList<A> implements List<A>, Cloneable, java.io.Serializable {
+public class WrapList<E, A> extends AbstractList<A> implements List<A>, Cloneable, java.io.Serializable {
 
 	private List<E> list;
 
@@ -12,22 +12,22 @@ public class AttributeList<E, A> extends AbstractList<A> implements List<A>, Clo
 
 	private BiConsumer<E, A> attributeSetter;
 
-	public AttributeList(List<E> list, Function<E, A> attributeGetter, BiConsumer<E, A> attributeSetter) {
+	public WrapList(List<E> list, Function<E, A> attributeGetter, BiConsumer<E, A> attributeSetter) {
 		this.list = list;
 		this.attributeGetter = attributeGetter;
 		this.attributeSetter = attributeSetter;
 	}
 
-	public static <E, A> AttributeList<E, A> wrap(List<E> list, Function<E, A> attributeFunction) {
-		return new AttributeList<>(list, attributeFunction, null);
+	public static <E, A> WrapList<E, A> wrap(List<E> list, Function<E, A> attributeFunction) {
+		return new WrapList<>(list, attributeFunction, null);
 	}
 
-	public static <E, A> AttributeList<E, A> wrap(List<E> list, Function<E, A> attributeFunction, BiConsumer<E, A> attributeSetter) {
-		return new AttributeList<>(list, attributeFunction, attributeSetter);
+	public static <E, A> WrapList<E, A> wrap(List<E> list, Function<E, A> attributeFunction, BiConsumer<E, A> attributeSetter) {
+		return new WrapList<>(list, attributeFunction, attributeSetter);
 	}
 
-	public <B> AttributeList<E, B> attributeMode(Function<E, B> attributeFunction, BiConsumer<E, B> attributeSetter) {
-		return new AttributeList<>(list, attributeFunction, attributeSetter);
+	public <B> WrapList<E, B> attributeMode(Function<E, B> attributeFunction, BiConsumer<E, B> attributeSetter) {
+		return new WrapList<>(list, attributeFunction, attributeSetter);
 	}
 
 
@@ -158,7 +158,7 @@ public class AttributeList<E, A> extends AbstractList<A> implements List<A>, Clo
 			checkForComodification();
 
 			try {
-				AttributeList.this.remove(lastRet);
+				WrapList.this.remove(lastRet);
 				if (lastRet < cursor)
 					cursor--;
 				lastRet = -1;
@@ -218,7 +218,7 @@ public class AttributeList<E, A> extends AbstractList<A> implements List<A>, Clo
 			checkForComodification();
 
 			try {
-				AttributeList.this.set(lastRet, e, this.attributeGetter, this.attributeSetter);
+				WrapList.this.set(lastRet, e, this.attributeGetter, this.attributeSetter);
 				expectedModCount = modCount;
 			} catch (IndexOutOfBoundsException ex) {
 				throw new ConcurrentModificationException();
