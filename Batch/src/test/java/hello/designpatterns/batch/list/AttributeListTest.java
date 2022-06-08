@@ -1,5 +1,7 @@
 package hello.designpatterns.batch.list;
 
+import com.alibaba.fastjson.JSON;
+import hello.designpatterns.batch.tuple.TwoTuple;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -419,12 +421,108 @@ public class AttributeListTest {
 
 	@Test
 	public void test15() {
-		AttributeList<Person, Long> list = AttributeList.wrap(persons, Person::getId, Person::setId);
+		AttributeList<Person, TwoTuple<Long, String>> list = AttributeList.wrap(persons, person ->
+			new TwoTuple<Long, String>() {
+				@Override
+				public Long getA() {
+					return person.getId();
+				}
 
-		AttributeList<Person, Long>.ListItr iterator = list.iterator();
+				@Override
+				public void setA(Long o) {
+					person.setId(o);
+				}
+
+				@Override
+				public String getB() {
+					return person.getName();
+				}
+
+				@Override
+				public void setB(String o) {
+					person.setName(o);
+				}
+			}
+		);
+
+		String f1 = JSON.toJSONString(persons);
+
+		System.out.println("初始数据：" + f1);
+
+		System.out.println("=================================================================");
+
+		AttributeList<Person, TwoTuple<Long, String>>.ListItr iterator = list.iterator();
+
+		String f2 = JSON.toJSONString(list);
+
+		System.out.println("包装数据：" + f2);
+
+		System.out.println("=================================================================");
 
 		while (iterator.hasNext()) {
-			iterator.next();
+			TwoTuple<Long, String> tuple = iterator.next();
+
+			tuple.setA(tuple.getA() * 6);
+			tuple.setB(tuple.getB() + "-new");
 		}
+
+		String f3 = JSON.toJSONString(list);
+
+		System.out.println("更新数据：" + f3);
+
+		System.out.println("=================================================================");
+
+		String f4 = JSON.toJSONString(persons);
+
+		System.out.println("最终数据：" + f4);
+	}
+
+	@Test
+	public void test16() {
+		AttributeList<Person, TwoTuple<Long, String>> list = AttributeList.wrap(persons, person ->
+				new TwoTuple<Long, String>() {
+					@Override
+					public Long getA() {
+						return person.getId();
+					}
+
+					@Override
+					public void setA(Long o) {
+						person.setId(o);
+					}
+
+					@Override
+					public String getB() {
+						return person.getName();
+					}
+
+					@Override
+					public void setB(String o) {
+						person.setName(o);
+					}
+				}
+		);
+
+		String f1 = JSON.toJSONString(persons);
+
+		System.out.println("初始数据：" + f1);
+
+		System.out.println("=================================================================");
+
+		AttributeList<Person, TwoTuple<Long, String>>.ListItr iterator = list.iterator();
+
+		TwoTuple<Long, String> next = iterator.next();
+
+		TwoTuple<Long, String> tuple = new TwoTuple<>();
+		tuple.setA(4L);
+		tuple.setB("<<abc>>");
+
+		iterator.set(tuple);
+
+		String f3 = JSON.toJSONString(list);
+
+		System.out.println("更新数据：" + f3);
+
+		System.out.println("=================================================================");
 	}
 }

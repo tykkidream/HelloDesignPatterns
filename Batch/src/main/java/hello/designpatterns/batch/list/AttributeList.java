@@ -18,6 +18,10 @@ public class AttributeList<E, A> extends AbstractList<A> implements List<A>, Clo
 		this.attributeSetter = attributeSetter;
 	}
 
+	public static <E, A> AttributeList<E, A> wrap(List<E> list, Function<E, A> attributeFunction) {
+		return new AttributeList<>(list, attributeFunction, null);
+	}
+
 	public static <E, A> AttributeList<E, A> wrap(List<E> list, Function<E, A> attributeFunction, BiConsumer<E, A> attributeSetter) {
 		return new AttributeList<>(list, attributeFunction, attributeSetter);
 	}
@@ -50,6 +54,10 @@ public class AttributeList<E, A> extends AbstractList<A> implements List<A>, Clo
 	}
 
 	public A set(int index, A element, Function<E, A> attributeGetter, BiConsumer<E, A> attributeSetter) {
+		if (attributeSetter == null) {
+			throw new RuntimeException("非法操作，不存在 setter 接口实例，不可以设置新值！");
+		}
+
 		E item = list.get(index);
 
 		A old = attributeGetter.apply(item);
