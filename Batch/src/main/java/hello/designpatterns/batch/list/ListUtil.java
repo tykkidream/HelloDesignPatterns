@@ -4,10 +4,7 @@ import hello.designpatterns.batch.tuple.ThreeTuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.*;
 
 public class ListUtil {
@@ -241,23 +238,35 @@ public class ListUtil {
 	}
 
 	public static <A, E, D> void leftJoin(WrapList<E, A> leftList, WrapList<D, A> rightList, BiConsumer<E, D> attributeSetter) {
-		if (leftList == null || leftList.isEmpty() || rightList == null || rightList.isEmpty()) {
+		leftJoin(leftList, rightList, attributeSetter, (o1, o2) -> o1.equals(o2) ? 0 : 1);
+	}
+
+	public static <A, E, D> void leftJoin(WrapList<E, A> leftList, WrapList<D, A> rightList, BiConsumer<E, D> attributeSetter, Comparator<A> comparator) {
+		if (leftList == null || leftList.isEmpty() || rightList == null || rightList.isEmpty() || comparator == null) {
 			return;
 		}
 
 		WrapList<E, A>.ListItr leftIterator = leftList.iterator();
 		WrapList<D, A>.ListItr rightIterator = rightList.iterator();
 
+		A:
 		while (leftIterator.hasNext()) {
 
 			A leftItemKey = leftIterator.next();
 
 			E leftItemRoot = leftIterator.root();
 
+			B:
 			while (rightIterator.hasNext()) {
 				A rightItemKey = rightIterator.next();
 
-				if (leftItemKey.equals(rightItemKey)) {
+				int compare = comparator.compare(leftItemKey, rightItemKey);
+
+				if (compare < 0) {
+					continue A;
+				} else if (compare > 0) {
+					continue B;
+				} else {
 					D rightItemRoot = rightIterator.root();
 
 					attributeSetter.accept(leftItemRoot, rightItemRoot);
@@ -268,5 +277,21 @@ public class ListUtil {
 
 			rightIterator.markRingStartingPoint();
 		}
+	}
+
+	public static <A, E, D> void leftJoin(List<E> leftList, List<D> rightList,
+										  Function<E, A> leftGetter, Function<D, A> rightGetter,
+										  BiConsumer<E, D> leftSetter, Comparator<A> comparator) {
+		if (leftList == null || leftList.isEmpty()
+				||rightList == null || rightList.isEmpty()
+				|| leftGetter == null || rightGetter == null
+				|| leftSetter == null || comparator == null) {
+			return;
+		}
+
+		WrapList<E, A> wrapLeftList = WrapList.wrap(leftList, leftGetter);
+		WrapList<D, A> wrapRightList = WrapList.wrap(rightList, rightGetter);
+
+		leftJoin(wrapLeftList, wrapRightList, leftSetter, comparator);
 	}
 }

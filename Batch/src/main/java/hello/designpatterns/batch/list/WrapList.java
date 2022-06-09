@@ -18,6 +18,10 @@ public class WrapList<E, A> extends AbstractList<A> implements List<A>, Cloneabl
 		this.attributeSetter = attributeSetter;
 	}
 
+	public static <E> WrapList<E, E> wrap(List<E> list) {
+		return new WrapList<>(list,  e -> e, null);
+	}
+
 	public static <E, A> WrapList<E, A> wrap(List<E> list, Function<E, A> attributeFunction) {
 		return new WrapList<>(list, attributeFunction, null);
 	}
