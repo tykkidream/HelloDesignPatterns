@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -17,10 +18,10 @@ public class WrapListTest {
 	public void before() {
 		persons = new ArrayList<>();
 
-		persons.add(new Person(1L, "ali"));
+		persons.add(new Person(3L, "ali"));
 		persons.add(new Person(2L, "tengxun"));
-		persons.add(new Person(3L, "huawei"));
-		persons.add(new Person(4L, "baidu"));
+		persons.add(new Person(4L, "huawei"));
+		persons.add(new Person(1L, "baidu"));
 	}
 
 
@@ -524,5 +525,63 @@ public class WrapListTest {
 		System.out.println("更新数据：" + f3);
 
 		System.out.println("=================================================================");
+	}
+
+	@Test
+	public void test17() {
+		WrapList<Person, TwoTuple<Long, String>> list = WrapList.wrap(persons, person ->
+				new TwoTuple<Long, String>() {
+					@Override
+					public Long getA() {
+						return person.getId();
+					}
+
+					@Override
+					public void setA(Long o) {
+						person.setId(o);
+					}
+
+					@Override
+					public String getB() {
+						return person.getName();
+					}
+
+					@Override
+					public void setB(String o) {
+						person.setName(o);
+					}
+				}
+		);
+
+		String f1 = JSON.toJSONString(persons);
+
+		System.out.println("初始数据：" + f1);
+
+		System.out.println("=================================================================");
+
+
+		String f2 = JSON.toJSONString(list);
+
+		System.out.println("包装数据：" + f2);
+
+		System.out.println("=================================================================");
+
+		// TODO 需要实现排序
+		list.sort(new Comparator<TwoTuple<Long, String>>() {
+			@Override
+			public int compare(TwoTuple<Long, String> o1, TwoTuple<Long, String> o2) {
+				return o1.getA().compareTo(o2.getA());
+			}
+		});
+
+		String f3 = JSON.toJSONString(list);
+
+		System.out.println("更新数据：" + f3);
+
+		System.out.println("=================================================================");
+
+		String f4 = JSON.toJSONString(persons);
+
+		System.out.println("最终数据：" + f4);
 	}
 }

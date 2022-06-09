@@ -59,16 +59,18 @@ public class WrapList<E, A> extends AbstractList<A> implements List<A>, Cloneabl
 
 	public A set(int index, A element, Function<E, A> attributeGetter, BiConsumer<E, A> attributeSetter) {
 		if (attributeSetter == null) {
-			throw new RuntimeException("非法操作，不存在 setter 接口实例，不可以设置新值！");
+
+
+			return null;
+		} else {
+			E item = list.get(index);
+
+			A old = attributeGetter.apply(item);
+
+			attributeSetter.accept(item, element);
+
+			return old;
 		}
-
-		E item = list.get(index);
-
-		A old = attributeGetter.apply(item);
-
-		attributeSetter.accept(item, element);
-
-		return old;
 	}
 
 	@Override
@@ -85,6 +87,11 @@ public class WrapList<E, A> extends AbstractList<A> implements List<A>, Cloneabl
 	@Override
 	public int size() {
 		return list.size();
+	}
+
+	@Override
+	public void sort(Comparator<? super A> c) {
+		// TODO 需要实现排序
 	}
 
 	@Override
