@@ -59,9 +59,7 @@ public class WrapList<E, A> extends AbstractList<A> implements List<A>, Cloneabl
 
 	public A set(int index, A element, Function<E, A> attributeGetter, BiConsumer<E, A> attributeSetter) {
 		if (attributeSetter == null) {
-
-
-			return null;
+			throw new UnsupportedOperationException("非法操作，不存在 setter 接口实例，不可以设置新值！");
 		} else {
 			E item = list.get(index);
 
