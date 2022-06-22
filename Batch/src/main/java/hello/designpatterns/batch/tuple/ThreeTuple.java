@@ -24,4 +24,14 @@ public class ThreeTuple<A, B, C> extends TwoTuple<A, B> {
 
         return data;
     }
+
+    public C getC() {
+        return c;
+    }
+
+    public void setC(C c) {
+        if (c != null) {
+            this.c = c;
+        }
+    }
 }

@@ -24,4 +24,14 @@ public class SixTuple<A, B, C, D, E, F> extends FiveTuple<A, B, C, D, E> {
 
         return data;
     }
+
+    public F getF() {
+        return f;
+    }
+
+    public void setF(F f) {
+        if (f != null) {
+            this.f = f;
+        }
+    }
 }

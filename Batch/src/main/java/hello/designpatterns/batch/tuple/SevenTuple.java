@@ -24,4 +24,14 @@ public class SevenTuple<A, B, C, D, E, F, G> extends SixTuple<A, B, C, D, E, F> 
 
         return data;
     }
+
+    public G getG() {
+        return g;
+    }
+
+    public void setG(G g) {
+        if (g != null) {
+            this.g = g;
+        }
+    }
 }
