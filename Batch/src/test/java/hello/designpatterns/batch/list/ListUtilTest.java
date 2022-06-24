@@ -2,10 +2,12 @@ package hello.designpatterns.batch.list;
 
 import com.alibaba.fastjson.JSON;
 import hello.designpatterns.batch.tuple.ThreeTuple;
+import hello.designpatterns.batch.tuple.TwoTuple;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ListUtilTest {
@@ -47,5 +49,52 @@ public class ListUtilTest {
 		ListUtil.leftJoin(list1, list2, Person::setRelation);
 
 		System.out.println(JSON.toJSONString(persons1));
+	}
+
+	@Test
+	public void test3() {
+		List<ThreeTuple<Integer, String, Data>> list1 = new LinkedList();
+
+		{
+			list1.add(new ThreeTuple<>(2, "b", null));
+			list1.add(new ThreeTuple<>(2, "c", null));
+			list1.add(new ThreeTuple<>(3, "a", null));
+			list1.add(new ThreeTuple<>(4, "b", null));
+		}
+
+		List<Data> list2 = new LinkedList<>();
+
+		{
+			list2.add(new Data(3, "a"));
+			list2.add(new Data(4, "b"));
+			list2.add(new Data(5, "a"));
+			list2.add(new Data(6, "c"));
+			list2.add(new Data(2, "c"));
+		}
+
+		ListUtil.leftJoin(list1, list2, (o1, o2) -> {
+			Integer a = o1.getA();
+			Integer v1 = o2.getV1();
+			String b = o1.getB();
+			String v2 = o2.getV2();
+
+			int compared = 0;
+
+			try {
+				compared = a.compareTo(v1);
+
+				if (compared != 0) {
+					return compared;
+				}
+
+				compared = b.compareTo(v2);
+
+				return compared;
+			} finally {
+				System.out.println(a + ":" + v1 + ", " + b + ":" + v2 + ", " + compared);
+			}
+		}, ThreeTuple::setC);
+
+		System.out.println(JSON.toJSON(list1));
 	}
 }

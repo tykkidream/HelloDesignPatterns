@@ -294,4 +294,58 @@ public class ListUtil {
 
 		leftJoin(wrapLeftList, wrapRightList, leftSetter, comparator);
 	}
+
+	public static <E, D> void leftJoin(List<E> leftList, List<D> rightList, DiffComparator<E, D> comparator, BiConsumer<E, D> leftSetter) {
+		if (leftList == null || leftList.isEmpty() || rightList == null || rightList.isEmpty() || comparator == null) {
+			return;
+		}
+
+		Iterator<E> leftIterator = leftList.iterator();
+
+		ForwardIterator<D> rightIterator = new ForwardIterator<>(rightList);
+
+		D rightItem = null;
+
+		A:
+		while (leftIterator.hasNext()) {
+
+			E leftItem = leftIterator.next();
+
+			B:
+			if (rightItem != null) {
+				int compare = comparator.compare(leftItem, rightItem);
+
+				if (compare < 0) {
+					continue A;
+				} else if (compare > 0) {
+					break B;
+				} else {
+					leftSetter.accept(leftItem, rightItem);
+					rightIterator.markRingStartingPoint();
+					rightItem = null;
+					continue A;
+				}
+
+			}
+
+			C:
+			while (rightIterator.hasNext()) {
+				rightItem = rightIterator.next();
+
+				int compare = comparator.compare(leftItem, rightItem);
+
+				if (compare < 0) {
+					continue A;
+				} else if (compare > 0) {
+					continue C;
+				} else {
+					leftSetter.accept(leftItem, rightItem);
+
+					break C;
+				}
+			}
+
+			rightIterator.markRingStartingPoint();
+		}
+	}
 }
