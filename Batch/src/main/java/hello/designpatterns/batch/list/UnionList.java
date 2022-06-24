@@ -38,6 +38,20 @@ public class UnionList<K, D> implements List<D>, Cloneable, java.io.Serializable
         lastData = data;
     }
 
+    public void putIgnore(K key, List<D> data) {
+        if (key == null || data == null || data.isEmpty()) {
+            return;
+        }
+
+        if (allData.containsKey(key)) {
+            return;
+        }
+
+        allData.put(key, data);
+
+        lastData = data;
+    }
+
     public void del(K key, List<D> data) {
         if (key == null) {
             throw new IllegalArgumentException("参数 key 不能为 null！");
