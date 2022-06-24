@@ -141,34 +141,15 @@ public class ListUtil {
 	}
 
 	public static <T> void iterateRemove(List<T> datas, Predicate<T> predicate) {
-		Iterator<T> iterator = datas.iterator();
-
-		while (iterator.hasNext()) {
-			T data = iterator.next();
-
-			if (data == null) {
-				iterator.remove();
-				continue;
-			}
-
-			boolean test;
-
-			try {
-				test = predicate.test(data);
-			} catch (Throwable throwable) {
-				if (logger.isErrorEnabled()) {
-					logger.error(throwable.getMessage(), throwable);
-				}
-				test = true;
-			}
-
-			if (test) {
-				iterator.remove();
-			}
-		}
+		iterateRemove(datas, predicate, null);
 	}
 
 	public static <T> List<T> iterateRemove(List<T> datas, Predicate<T> predicate, List<T> removeList) {
+		Function<T, T > function =  a ->  predicate.test(a) ? a : null;
+		return iterateRemove(datas, function, removeList);
+	}
+
+	public static <T, R> List<R> iterateRemove(List<T> datas, Function<T, R> function, List<R> removeList) {
 		Iterator<T> iterator = datas.iterator();
 
 		while (iterator.hasNext()) {
@@ -179,21 +160,19 @@ public class ListUtil {
 				continue;
 			}
 
-			boolean test;
+			R apply = null;
 
 			try {
-				test = predicate.test(data);
+				apply = function.apply(data);
 			} catch (Throwable throwable) {
 				if (logger.isErrorEnabled()) {
 					logger.error(throwable.getMessage(), throwable);
 				}
-				test = true;
 			}
 
-			if (test) {
+			if (apply != null) {
 				iterator.remove();
-
-				removeList.add(data);
+				removeList.add(apply);
 			}
 		}
 
