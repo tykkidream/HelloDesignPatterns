@@ -172,7 +172,10 @@ public class ListUtil {
 
 			if (apply != null) {
 				iterator.remove();
-				removeList.add(apply);
+
+				if (removeList != null) {
+					removeList.add(apply);
+				}
 			}
 		}
 
