@@ -1,5 +1,6 @@
 package hello.designpatterns.batch.list;
 
+import hello.designpatterns.batch.function.TeConsumer;
 import hello.designpatterns.batch.tuple.ThreeTuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -204,50 +205,23 @@ public class ListUtil {
 	}
 
 	public static <A, E, D> List<ThreeTuple<A, E, D>> leftJoin(WrapList<E, A> leftList, WrapList<D, A> rightList, List<ThreeTuple<A, E, D>> result) {
-		if (leftList == null || leftList.isEmpty() || rightList == null || rightList.isEmpty()) {
-			return result;
-		}
-
-		WrapList<E, A>.ListItr leftIterator = leftList.iterator();
-		WrapList<D, A>.ListItr rightIterator = rightList.iterator();
-
-		while (leftIterator.hasNext()) {
-
-			A leftItemKey = leftIterator.next();
-
-			E leftItemRoot = leftIterator.root();
-
-			D rightItemRoot = null;
-
-			while (rightIterator.hasNext()) {
-				A rightItemKey = rightIterator.next();
-
-				if (leftItemKey.equals(rightItemKey)) {
-					rightItemRoot = rightIterator.root();
-
-					rightIterator.markRingStartingPoint();
-
-					break;
-				}
-			}
-
-			result.add(new ThreeTuple<>(leftItemKey, leftItemRoot, rightItemRoot));
-		}
-
+		leftJoin(leftList, rightList, (o1, o2) -> o1.equals(o2) ? 0 : 1, (a, e, d) -> result.add(new ThreeTuple<>(a, e, d)));
 		return result;
 	}
 
 	public static <A, E, D> void leftJoin(WrapList<E, A> leftList, WrapList<D, A> rightList, BiConsumer<E, D> attributeSetter) {
-		leftJoin(leftList, rightList, attributeSetter, (o1, o2) -> o1.equals(o2) ? 0 : 1);
+		leftJoin(leftList, rightList, (o1, o2) -> o1.equals(o2) ? 0 : 1, (a,e,d) -> attributeSetter.accept(e,d));
 	}
 
-	public static <A, E, D> void leftJoin(WrapList<E, A> leftList, WrapList<D, A> rightList, BiConsumer<E, D> attributeSetter, Comparator<A> comparator) {
+	public static <A, E, D> void leftJoin(WrapList<E, A> leftList, WrapList<D, A> rightList, Comparator<A> comparator, TeConsumer<A, E, D> attributeSetter) {
 		if (leftList == null || leftList.isEmpty() || rightList == null || rightList.isEmpty() || comparator == null) {
 			return;
 		}
 
 		WrapList<E, A>.ListItr leftIterator = leftList.iterator();
 		WrapList<D, A>.ListItr rightIterator = rightList.iterator();
+
+		A rightItemKey = null;
 
 		A:
 		while (leftIterator.hasNext()) {
@@ -257,19 +231,38 @@ public class ListUtil {
 			E leftItemRoot = leftIterator.root();
 
 			B:
+			if (rightItemKey != null) {
+				int compare = comparator.compare(leftItemKey, rightItemKey);
+
+				if (compare < 0) {
+					continue A;
+				} else if (compare > 0) {
+					break B;
+				} else {
+					D rightItemRoot = rightIterator.root();
+
+					attributeSetter.accept(leftItemKey, leftItemRoot, rightItemRoot);
+					rightIterator.markRingStartingPoint();
+
+					rightItemKey = null;
+					continue A;
+				}
+			}
+
+			C:
 			while (rightIterator.hasNext()) {
-				A rightItemKey = rightIterator.next();
+				rightItemKey = rightIterator.next();
 
 				int compare = comparator.compare(leftItemKey, rightItemKey);
 
 				if (compare < 0) {
 					continue A;
 				} else if (compare > 0) {
-					continue B;
+					continue C;
 				} else {
 					D rightItemRoot = rightIterator.root();
 
-					attributeSetter.accept(leftItemRoot, rightItemRoot);
+					attributeSetter.accept(leftItemKey, leftItemRoot, rightItemRoot);
 
 					break;
 				}
@@ -289,10 +282,12 @@ public class ListUtil {
 			return;
 		}
 
-		WrapList<E, A> wrapLeftList = WrapList.wrap(leftList, leftGetter);
-		WrapList<D, A> wrapRightList = WrapList.wrap(rightList, rightGetter);
+		leftJoin(leftList, rightList, (a, b) -> {
+			A k1 = leftGetter.apply(a);
+			A k2 = rightGetter.apply(b);
 
-		leftJoin(wrapLeftList, wrapRightList, leftSetter, comparator);
+			return comparator.compare(k1, k2);
+		}, leftSetter);
 	}
 
 	public static <E, D> void leftJoin(List<E> leftList, List<D> rightList, DiffComparator<E, D> comparator, BiConsumer<E, D> leftSetter) {
@@ -325,7 +320,6 @@ public class ListUtil {
 					rightItem = null;
 					continue A;
 				}
-
 			}
 
 			C:
@@ -340,7 +334,6 @@ public class ListUtil {
 					continue C;
 				} else {
 					leftSetter.accept(leftItem, rightItem);
-
 					break C;
 				}
 			}

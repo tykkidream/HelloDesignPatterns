@@ -38,6 +38,10 @@ public class ListUtilTest {
 
 		List<ThreeTuple<Long, Person, Person>> result = ListUtil.leftJoin(list1, list2);
 
+		System.out.println(JSON.toJSONString(list1));
+		System.out.println(JSON.toJSONString(persons1));
+		System.out.println(JSON.toJSONString(list2));
+		System.out.println(JSON.toJSONString(persons2));
 		System.out.println(JSON.toJSONString(result));
 	}
 
