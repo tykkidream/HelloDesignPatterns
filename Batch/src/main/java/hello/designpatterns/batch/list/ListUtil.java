@@ -189,52 +189,6 @@ public class ListUtil {
 		return removeList;
 	}
 
-	@Deprecated
-	public static <T, R> List<R> iterateRemove(List<T> datas, Function<T, R> function, BiConsumer<T, Throwable> throwableConsumer, List<R> removeList) {
-		Iterator<T> iterator = datas.iterator();
-
-		while (iterator.hasNext()) {
-			T data = iterator.next();
-
-			if (data == null) {
-				iterator.remove();
-				continue;
-			}
-
-			R apply = null;
-
-			try {
-				apply = function.apply(data);
-			} catch (Throwable throwable) {
-				iterator.remove();
-
-				if (logger.isErrorEnabled()) {
-					logger.error(throwable.getMessage(), throwable);
-				}
-
-				try {
-					if (throwableConsumer != null) {
-						throwableConsumer.accept(data, throwable);
-					}
-				} catch (Throwable __throwable) {
-					if (logger.isErrorEnabled()) {
-						logger.error(__throwable.getMessage(), __throwable);
-					}
-				}
-			}
-
-			if (apply != null) {
-				iterator.remove();
-
-				if (removeList != null) {
-					removeList.add(apply);
-				}
-			}
-		}
-
-		return removeList;
-	}
-
 	public static <A, E, D> List<ThreeTuple<A, E, D>> leftJoin(WrapList<E, A> leftList, WrapList<D, A> rightList) {
 		return leftJoin(leftList, rightList, new LinkedList<>());
 	}
