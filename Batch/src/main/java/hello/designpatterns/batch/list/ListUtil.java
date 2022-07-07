@@ -140,16 +140,57 @@ public class ListUtil {
 		return null;
 	}
 
-	public static <T> void iterateRemove(List<T> datas, Predicate<T> predicate) {
-		iterateRemove(datas, predicate, null);
+	public static <T> void iterateRemove(List<T> datas, Predicate<T> predicate, BiConsumer<T, Throwable> throwableConsumer) {
+		iterateRemove(datas, predicate, throwableConsumer, null);
 	}
 
-	public static <T> List<T> iterateRemove(List<T> datas, Predicate<T> predicate, List<T> removeList) {
-		Function<T, T > function =  a ->  predicate.test(a) ? a : null;
-		return iterateRemove(datas, function, removeList);
+	public static <T> List<T> iterateRemove(List<T> datas, Predicate<T> predicate, BiConsumer<T, Throwable> throwableConsumer, List<T> removeList) {
+		Iterator<T> iterator = datas.iterator();
+
+		while (iterator.hasNext()) {
+			T data = iterator.next();
+
+			if (data == null) {
+				iterator.remove();
+				continue;
+			}
+
+			try {
+				if (predicate.test(data)) {
+					iterator.remove();
+
+					if (removeList != null) {
+						removeList.add(data);
+					}
+				}
+			} catch (Throwable throwable) {
+				iterator.remove();
+
+				if (removeList != null) {
+					removeList.add(data);
+				}
+
+				if (logger.isErrorEnabled()) {
+					logger.error(throwable.getMessage(), throwable);
+				}
+
+				try {
+					if (throwableConsumer != null) {
+						throwableConsumer.accept(data, throwable);
+					}
+				} catch (Throwable __throwable) {
+					if (logger.isErrorEnabled()) {
+						logger.error(__throwable.getMessage(), __throwable);
+					}
+				}
+			}
+		}
+
+		return removeList;
 	}
 
-	public static <T, R> List<R> iterateRemove(List<T> datas, Function<T, R> function, List<R> removeList) {
+	@Deprecated
+	public static <T, R> List<R> iterateRemove(List<T> datas, Function<T, R> function, BiConsumer<T, Throwable> throwableConsumer, List<R> removeList) {
 		Iterator<T> iterator = datas.iterator();
 
 		while (iterator.hasNext()) {
@@ -165,8 +206,20 @@ public class ListUtil {
 			try {
 				apply = function.apply(data);
 			} catch (Throwable throwable) {
+				iterator.remove();
+
 				if (logger.isErrorEnabled()) {
 					logger.error(throwable.getMessage(), throwable);
+				}
+
+				try {
+					if (throwableConsumer != null) {
+						throwableConsumer.accept(data, throwable);
+					}
+				} catch (Throwable __throwable) {
+					if (logger.isErrorEnabled()) {
+						logger.error(__throwable.getMessage(), __throwable);
+					}
 				}
 			}
 
