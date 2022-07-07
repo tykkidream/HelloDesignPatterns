@@ -119,11 +119,10 @@ public class WrapList<E, A> extends AbstractList<A> implements List<A>, Cloneabl
 
 		public void markRingStartingPoint() {
 			if (cursor == size()) {
-				this.cursor = 0;
-				this.ringStartingPoint = 0;
-			} else {
-				this.ringStartingPoint = this.cursor;
+				this.cursor = size() -1;
 			}
+
+			this.ringStartingPoint = this.cursor;
 		}
 
 		public boolean hasNext() {
@@ -140,12 +139,14 @@ public class WrapList<E, A> extends AbstractList<A> implements List<A>, Cloneabl
 				int i = cursor;
 				A next = get(i, attributeGetter);
 				lastRet = i;
-				cursor = i + 1;
+ 				cursor = i + 1;
 
 				if (ringStartingPoint > -1) {
 					if (cursor == size()) {
 						cursor = 0;
-					} else if (cursor == ringStartingPoint){
+					}
+
+					if (cursor == ringStartingPoint){
 						ringStartingPoint = -1;
 					}
 				}

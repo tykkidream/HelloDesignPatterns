@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ForwardIteratorTest {
@@ -50,6 +51,8 @@ public class ForwardIteratorTest {
 
         iterator.next();
         iterator.next();
+        iterator.next();
+        iterator.next();
         iterator.markRingStartingPoint();
 
         while (iterator.hasNext()) {
@@ -57,11 +60,100 @@ public class ForwardIteratorTest {
             System.out.println(person.getId());
         }
 
+
+        System.out.println("===============================");
+
+        try {
+            System.out.println(iterator.hasNext());
+            iterator.next();
+
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+
+
+
+        System.out.println("===============================");
+
         iterator.markRingStartingPoint();
 
         while (iterator.hasNext()) {
             Person person = iterator.next();
             System.out.println(person.getId());
+        }
+    }
+
+    @Test
+    public void test04() {
+        List<Integer> list = Arrays.asList(0);
+
+        {
+            ForwardIterator<Integer> iterator = new ForwardIterator<>(list);
+
+            while (iterator.hasNext()) {
+                System.out.println(iterator.next());
+            }
+        }
+
+        System.out.println("======================");
+
+        {
+            ForwardIterator<Integer> iterator = new ForwardIterator<>(list);
+
+            iterator.markRingStartingPoint();
+
+            while (iterator.hasNext()) {
+                System.out.println(iterator.next());
+            }
+        }
+    }
+
+    @Test
+    public void test05() {
+        List<Integer> list = Arrays.asList(0, 1);
+
+        {
+            ForwardIterator<Integer> iterator = new ForwardIterator<>(list);
+
+            while (iterator.hasNext()) {
+                System.out.println(iterator.next());
+            }
+        }
+
+        System.out.println("======================");
+
+        {
+            ForwardIterator<Integer> iterator = new ForwardIterator<>(list);
+            iterator.markRingStartingPoint();
+
+            while (iterator.hasNext()) {
+                System.out.println(iterator.next());
+            }
+        }
+    }
+
+    @Test
+    public void test06() {
+        List<Integer> list = Arrays.asList(0, 1, 2);
+
+
+        {
+            ForwardIterator<Integer> iterator = new ForwardIterator<>(list);
+
+            while (iterator.hasNext()) {
+                System.out.println(iterator.next());
+            }
+        }
+
+        System.out.println("======================");
+
+        {
+            ForwardIterator<Integer> iterator = new ForwardIterator<>(list);
+            iterator.markRingStartingPoint();
+
+            while (iterator.hasNext()) {
+                System.out.println(iterator.next());
+            }
         }
     }
 }

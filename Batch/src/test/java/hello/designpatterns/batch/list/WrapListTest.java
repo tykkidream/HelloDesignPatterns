@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import java.util.*;
 
+import static org.junit.Assert.assertEquals;
+
 public class WrapListTest {
 
 	private List<Person> persons;
@@ -21,75 +23,132 @@ public class WrapListTest {
 		persons.add(new Person(1L, "baidu"));
 	}
 
-
+	/**
+	 * 应用于 java 循环语法的测试
+	 */
 	@Test
 	public void test1() {
 		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
+		long[] expects = {3, 2, 4, 1};
+		int i = 0;
+
 		for (Long obj : list) {
 			System.out.println(obj);
+			assertEquals(Long.valueOf(expects[i]), obj);
+			i++;
 		}
 	}
 
 
+	/**
+	 * 应用于 java 循环语法的测试
+	 */
 	@Test
 	public void test2() {
 		WrapList<Person, String> list = WrapList.wrap(persons, Person::getName, Person::setName);
 
+		String[] expects = {"ali", "tengxun", "huawei", "baidu"};
+		int i = 0;
+
 		for (String obj : list) {
 			System.out.println(obj);
+			assertEquals(expects[i], obj);
+			i++;
 		}
 	}
 
-
+	/**
+	 * 使用迭代器的单向循环测试
+	 * 迭代时，通过 set 设值
+	 */
 	@Test
 	public void test3() {
 		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		ListIterator<Long> iterator = list.iterator();
+		{
+			long[] expects = {3, 2, 4, 1};
+			int i = 0;
 
-		while (iterator.hasNext()) {
-			Long next = iterator.next();
+			ListIterator<Long> iterator = list.iterator();
 
-			System.out.print(next);
-			System.out.print(" => ");
+			while (iterator.hasNext()) {
+				// 测试迭代器
+				Long next = iterator.next();
 
-			next = 100 + next;
+				assertEquals(Long.valueOf(expects[i]), next);
+				i++;
 
-			System.out.println(next);
-			iterator.set(next);
+				System.out.print(next);
+				System.out.print(" => ");
+
+				next = 100 + next;
+
+				System.out.println(next);
+				// 测试 set
+				iterator.set(next);
+			}
 		}
 
 		System.out.println("======================================================");
 
-		for (Object obj : list) {
-			System.out.println(obj);
+		{
+			long[] expects = {103, 102, 104, 101};
+			int i = 0;
+
+			for (Object obj : list) {
+				System.out.println(obj);
+
+				assertEquals(Long.valueOf(expects[i]), obj);
+				i++;
+			}
 		}
 	}
 
-
+	/**
+	 * 使用迭代器的单向循环测试
+	 * 迭代时，通过 set 设值
+	 */
 	@Test
 	public void test4() {
 		WrapList<Person, String> list = WrapList.wrap(persons, Person::getName, Person::setName);
 
 		ListIterator<String> iterator = list.iterator();
 
-		while (iterator.hasNext()) {
-			String next = iterator.next();
+		{
+			String[] expects = {"ali", "tengxun", "huawei", "baidu"};
+			int i = 0;
 
-			System.out.print(next);
-			System.out.print(" => ");
+			while (iterator.hasNext()) {
+				String next = iterator.next();
 
-			next = next + "-New";
+				assertEquals(expects[i], next);
+				i++;
 
-			System.out.println(next);
-			iterator.set(next);
+				System.out.print(next);
+				System.out.print(" => ");
+
+				next = next + "-New";
+
+				System.out.println(next);
+				// 测试 set
+				iterator.set(next);
+			}
 		}
 
 		System.out.println("======================================================");
 
-		for (Object obj : list) {
-			System.out.println(obj);
+		{
+
+			String[] expects = {"ali-New", "tengxun-New", "huawei-New", "baidu-New"};
+			int i = 0;
+
+			for (Object obj : list) {
+				System.out.println(obj);
+
+				assertEquals(expects[i], obj);
+				i++;
+			}
 		}
 	}
 
@@ -173,7 +232,12 @@ public class WrapListTest {
 
 		WrapList<Person, Long>.ListItr iterator = list.iterator();
 
+		iterator.hasNext();
 		iterator.next();
+		iterator.next();
+		iterator.next();
+		iterator.next();
+		iterator.hasNext();
 		iterator.next();
 		iterator.markRingStartingPoint();
 
