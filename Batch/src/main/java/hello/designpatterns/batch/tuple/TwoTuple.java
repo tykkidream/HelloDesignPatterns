@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class TwoTuple<A, B> {
+public class TwoTuple<A, B> extends OneTuple<A> {
     public A a;
     public B b;
 
@@ -31,16 +31,6 @@ public class TwoTuple<A, B> {
         return Objects.hash(a, b);
     }
 
-    public static <A, B, DATA extends TwoTuple<A, B>> List<A> aList(List<DATA> twoTuples) {
-        List<A> data = new ArrayList<>(twoTuples.size());
-
-        for (DATA twoTuple : twoTuples) {
-            data.add(twoTuple.a);
-        }
-
-        return data;
-    }
-
     public static <A, B, DATA extends TwoTuple<A, B>> List<B> bList(List<DATA> twoTuples) {
         List<B> data = new ArrayList<>(twoTuples.size());
 
@@ -49,16 +39,6 @@ public class TwoTuple<A, B> {
         }
 
         return data;
-    }
-
-    public A getA() {
-        return a;
-    }
-
-    public void setA(A a) {
-        if (a != null) {
-            this.a = a;
-        }
     }
 
     public B getB() {
