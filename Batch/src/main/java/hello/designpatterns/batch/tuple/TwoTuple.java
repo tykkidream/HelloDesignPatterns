@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class TwoTuple<A, B> extends OneTuple<A> {
-    public A a;
     public B b;
 
     public TwoTuple() {
@@ -13,7 +12,7 @@ public class TwoTuple<A, B> extends OneTuple<A> {
     }
 
     public TwoTuple(A a, B b) {
-        this.a = a;
+        super(a);
         this.b = b;
     }
 

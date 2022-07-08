@@ -645,4 +645,27 @@ public class WrapListTest {
 
 		System.out.println("最终数据：" + f4);
 	}
+
+	@Test
+	public void test18() {
+		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
+
+		for (Long obj : list) {
+			System.out.println(obj);
+		}
+
+		list.sort(Long::compareTo);
+
+		System.out.println("========================================");
+
+		long[] expects = {1, 2, 3, 4};
+		int i = 0;
+
+		for (Long obj : list) {
+			System.out.println(obj);
+			assertEquals(Long.valueOf(expects[i]), obj);
+			i++;
+		}
+
+	}
 }

@@ -156,7 +156,7 @@ public class ListUtil {
 			}
 
 			try {
-				if (predicate.test(data)) {
+				if (!predicate.test(data)) {
 					iterator.remove();
 
 					if (removeList != null) {
