@@ -89,7 +89,8 @@ public class WrapList<E, A> extends AbstractList<A> implements List<A>, Cloneabl
 
 	@Override
 	public void sort(Comparator<? super A> c) {
-		// TODO 需要实现排序
+		Objects.requireNonNull(c);
+		list.sort((o1, o2) -> c.compare(this.attributeGetter.apply(o1), this.attributeGetter.apply(o2)));
 	}
 
 	@Override
