@@ -40,6 +40,10 @@ public class ForwardIterator<E> implements ListIterator<E> {
         this.ringStartingPoint = this.cursor;
     }
 
+    protected int lastRet() {
+        return lastRet;
+    }
+
     public boolean hasNext() {
         return (ringStartingPoint == -2 && cursor < size()) || ringStartingPoint > -1;
     }
@@ -73,7 +77,7 @@ public class ForwardIterator<E> implements ListIterator<E> {
         }
     }
 
-    public E root() {
+    public Object root() {
         return list.get(lastRet);
     }
 

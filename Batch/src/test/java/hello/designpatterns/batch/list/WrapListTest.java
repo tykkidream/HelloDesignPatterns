@@ -188,7 +188,7 @@ public class WrapListTest {
 	public void test6() {
 		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		WrapList<Person, Long>.ListItr iterator = list.iterator();
+		ForwardIterator<Long> iterator = list.iterator();
 
 		while (iterator.hasNext()) {
 			Long next = iterator.next();
@@ -207,7 +207,7 @@ public class WrapListTest {
 	public void test7() {
 		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		WrapList<Person, Long>.ListItr iterator = list.iterator();
+		ForwardIterator<Long> iterator = list.iterator();
 
 		iterator.next();
 		iterator.next();
@@ -230,7 +230,7 @@ public class WrapListTest {
 	public void test8() {
 		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		WrapList<Person, Long>.ListItr iterator = list.iterator();
+		ForwardIterator<Long> iterator = list.iterator();
 
 		iterator.hasNext();
 		iterator.next();
@@ -277,7 +277,7 @@ public class WrapListTest {
 	public void test9() {
 		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		WrapList<Person, Long>.ListItr iterator = list.iterator();
+		ForwardIterator<Long> iterator = list.iterator();
 
 		iterator.next();
 		iterator.next();
@@ -328,7 +328,7 @@ public class WrapListTest {
 	public void test10() {
 		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		WrapList<Person, Long>.ListItr iterator = list.iterator();
+		ForwardIterator<Long> iterator = list.iterator();
 
 		while (iterator.hasPrevious()) {
 			Long previous = iterator.previous();
@@ -347,7 +347,7 @@ public class WrapListTest {
 	public void test11() {
 		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		WrapList<Person, Long>.ListItr iterator = list.iterator();
+		ForwardIterator<Long> iterator = list.iterator();
 
 		while (iterator.hasNext()) {
 			iterator.next();
@@ -370,7 +370,7 @@ public class WrapListTest {
 	public void test12() {
 		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		WrapList<Person, Long>.ListItr iterator = list.iterator();
+		ForwardIterator<Long> iterator = list.iterator();
 
 		while (iterator.hasNext()) {
 			iterator.next();
@@ -397,7 +397,7 @@ public class WrapListTest {
 	public void test13() {
 		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		WrapList<Person, Long>.ListItr iterator = list.iterator();
+		ForwardIterator<Long> iterator = list.iterator();
 
 		iterator.next();
 		iterator.next();
@@ -430,7 +430,7 @@ public class WrapListTest {
 	public void test14() {
 		WrapList<Person, Long> list = WrapList.wrap(persons, Person::getId, Person::setId);
 
-		WrapList<Person, Long>.ListItr iterator = list.iterator();
+		ForwardIterator<Long> iterator = list.iterator();
 
 		while (iterator.hasNext()) {
 			iterator.next();
@@ -513,7 +513,7 @@ public class WrapListTest {
 
 		System.out.println("=================================================================");
 
-		WrapList<Person, TwoTuple<Long, String>>.ListItr iterator = list.iterator();
+		ForwardIterator<TwoTuple<Long, String>> iterator = list.iterator();
 
 		String f2 = JSON.toJSONString(list);
 
@@ -571,7 +571,7 @@ public class WrapListTest {
 
 		System.out.println("=================================================================");
 
-		WrapList<Person, TwoTuple<Long, String>>.ListItr iterator = list.iterator();
+		ForwardIterator<TwoTuple<Long, String>> iterator = list.iterator();
 
 		TwoTuple<Long, String> next = iterator.next();
 
