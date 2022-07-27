@@ -82,4 +82,31 @@ public class QuotaQueue2Test {
         Thread.sleep(300000);
 
     }
+
+    @Test
+    public void test3() throws InterruptedException {
+
+        {
+            test3sub();
+        }
+
+        System.gc();
+        System.gc();
+
+        System.out.println("==========================");
+
+        Thread.sleep(10000);
+
+        System.gc();
+        System.gc();
+
+        System.out.println("==========================");
+
+        Thread.sleep(300000);
+    }
+
+    private void test3sub() throws InterruptedException {
+        QuotaQueue2<String> quotaQueue = new QuotaQueue2("abc", 20);
+        Thread.sleep(10000);
+    }
 }

@@ -9,8 +9,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.LockSupport;
 
 public class QuotaQueue2<T> {
-    private static final long FIRST_TIME_OUT = 60 * 1000;
-
     private static <T extends Exception, R> R throwException(Throwable t) throws T {
         throw (T) t;
     }
@@ -44,21 +42,10 @@ public class QuotaQueue2<T> {
 
         @Override
         public void run() {
-            int i = 0;
             while (!quotaShapingThread.isInterrupted()) {
                 System.out.println("thread run 中");
 
-                long begin = System.currentTimeMillis();
-
                 LockSupport.parkNanos(10000000000L);
-
-                long end = System.currentTimeMillis();
-
-                System.out.println("测试线程结束：" + (end - begin));
-
-                i++;
-
-                System.out.println(i);
 
                 boolean hasNew = signal.getAndSet(false);
 
@@ -68,6 +55,8 @@ public class QuotaQueue2<T> {
                     } catch (Throwable throwable) {
                         throwable.printStackTrace();
                     }
+                } else {
+
                 }
             }
         }
@@ -154,6 +143,16 @@ public class QuotaQueue2<T> {
 
     public T poll(long timeout, TimeUnit timeUnit) throws InterruptedException {
         return taskQueue.poll(timeout, timeUnit);
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+
+        if (quotaShapingThread != null) {
+            quotaShapingThread.interrupt();
+            quotaShapingThread = null;
+        }
     }
 
     private class QuotaRule {
