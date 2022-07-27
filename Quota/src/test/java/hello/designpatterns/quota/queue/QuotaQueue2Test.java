@@ -267,6 +267,19 @@ public class QuotaQueue2Test {
         Queue<String> queue11 = quotaQueue.addQuota("k", 1, new LinkedBlockingDeque<>());
         Queue<String> queue12 = quotaQueue.addQuota("l", 1, new LinkedBlockingDeque<>());
 
+        Thread threadProduce = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (Data d : data) {
+                    quotaQueue.put(d.name, d.data);
+                }
+            }
+        });
+
+        threadProduce.start();
+
+        Thread.sleep(1000);
+
         Thread threadPrint = new Thread(new Runnable() {
             private int count;
 
@@ -312,10 +325,6 @@ public class QuotaQueue2Test {
         });
 
         threadPrint.start();
-
-        for (Data d : data) {
-            quotaQueue.put(d.name, d.data);
-        }
 
         Thread.sleep(1 * 1000);
     }
