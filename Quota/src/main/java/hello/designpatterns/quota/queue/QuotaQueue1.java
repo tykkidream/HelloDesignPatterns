@@ -201,8 +201,6 @@ public class QuotaQueue1<T> {
         private BlockingQueue<T> queue;
 
         private AtomicInteger in = new AtomicInteger(0);
-
-        private AtomicInteger inPrevious = new AtomicInteger(0);
     }
 
 }
