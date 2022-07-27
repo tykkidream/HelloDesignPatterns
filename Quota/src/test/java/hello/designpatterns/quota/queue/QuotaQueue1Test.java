@@ -224,9 +224,9 @@ public class QuotaQueue1Test {
 
                 System.out.println("结束： " + (end - begin));
 
-                /*for (String d : data) {
+                for (String d : data) {
                     System.out.println(d);
-                }*/
+                }
             }
         });
 
