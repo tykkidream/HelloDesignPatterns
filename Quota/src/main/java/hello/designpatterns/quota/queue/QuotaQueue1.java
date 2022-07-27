@@ -26,18 +26,18 @@ public class QuotaQueue1<T> {
     /**
      * 所有业务的任务，在根据配额规则计算后，编排进入此队列。
      */
-    private BlockingQueue<T> taskQuotaQueue;
+    private BlockingQueue<T> taskQueue;
 
     private Map<String, QuotaRule> quotaRules;
 
     private Thread quotaShapingThread;
 
-    public QuotaQueue1(String name) {
+    public QuotaQueue1(String name, int size) {
         taskQueues = new LinkedBlockingDeque<>();
 
         taskQueueRounds = new LinkedList<>();
 
-        taskQuotaQueue = new LinkedBlockingDeque<>();
+        taskQueue = new ArrayBlockingQueue<>(size);
 
         quotaRules = new HashMap<>();
 
@@ -52,8 +52,7 @@ public class QuotaQueue1<T> {
         public void run() {
             while (!quotaShapingThread.isInterrupted()) {
                 try {
-                    System.out.println("run 中");
-
+                    //System.out.println("run 中");
                     QuotaQueue1.this.run();
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
@@ -133,30 +132,30 @@ public class QuotaQueue1<T> {
             QuotaRule quotaRule = null;
 
             if (timeout <= 0) {
-                System.out.println("poll 中");
+                //System.out.println("poll 中");
                 quotaRule = taskQueues.poll();
             } else {
-                System.out.println("poll timeout 中");
+                //System.out.println("poll timeout 中");
                 quotaRule = taskQueues.poll(timeout, unit);
             }
 
-            System.out.println("poll 处理 中");
+            //System.out.println("poll 处理 中");
 
             if (quotaRule == null) {
-                System.out.println("poll false of null");
+                //System.out.println("poll false of null");
                 return false;
             }
 
             int in = quotaRule.in.get();
 
             if (in == 0) {
-                System.out.println("poll false of 0");
+                //System.out.println("poll false of 0");
                 return false;
             }
 
             if (quotaRule.queue.isEmpty()) {
                 if (quotaRule.in.compareAndSet(in, 0)) {
-                    System.out.println("poll false of empty");
+                    //System.out.println("poll false of empty");
                     return false;
                 }
             }
@@ -168,7 +167,7 @@ public class QuotaQueue1<T> {
                     break;
                 }
 
-                taskQuotaQueue.put(task);
+                taskQueue.put(task);
             }
 
             // 此时，quotaRule.quota 只可能有 0 个数据，也要将其添加到 taskQueueRounds 中一次。
@@ -187,11 +186,11 @@ public class QuotaQueue1<T> {
     }
 
     public T pollTask() {
-        return taskQuotaQueue.poll();
+        return taskQueue.poll();
     }
 
     public T pollTask(long timeout, TimeUnit timeUnit) throws InterruptedException {
-        return taskQuotaQueue.poll(timeout, timeUnit);
+        return taskQueue.poll(timeout, timeUnit);
     }
 
     private class QuotaRule {

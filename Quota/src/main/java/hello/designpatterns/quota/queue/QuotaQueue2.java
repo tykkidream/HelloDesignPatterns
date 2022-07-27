@@ -42,7 +42,7 @@ public class QuotaQueue2<T> {
         @Override
         public void run() {
             while (!quotaShapingThread.isInterrupted()) {
-                System.out.println("thread run 中");
+                //System.out.println("thread run 中");
 
                 LockSupport.parkNanos(10000000000L);
 
