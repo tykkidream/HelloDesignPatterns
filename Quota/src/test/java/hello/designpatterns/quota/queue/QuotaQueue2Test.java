@@ -2,6 +2,7 @@ package hello.designpatterns.quota.queue;
 
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -246,4 +247,76 @@ public class QuotaQueue2Test {
         }
     }
 
+
+    @Test
+    public void test5() throws InterruptedException {
+        List<Data> data = Data.data1(5000, Arrays.asList("l", "h", "d", "b", "c", "g", "a", "j", "i", "k", "f", "e"));
+
+        QuotaQueue2<String> quotaQueue = new QuotaQueue2("abc", 1000);
+
+        Queue<String> queue1 = quotaQueue.addQuota("a", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue2 = quotaQueue.addQuota("b", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue3 = quotaQueue.addQuota("c", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue4 = quotaQueue.addQuota("d", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue5 = quotaQueue.addQuota("e", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue6 = quotaQueue.addQuota("f", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue7 = quotaQueue.addQuota("g", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue8 = quotaQueue.addQuota("h", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue9 = quotaQueue.addQuota("i", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue10 = quotaQueue.addQuota("j", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue11 = quotaQueue.addQuota("k", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue12 = quotaQueue.addQuota("l", 1, new LinkedBlockingDeque<>());
+
+        Thread threadPrint = new Thread(new Runnable() {
+            private int count;
+
+            private long begin;
+
+            private long end;
+
+            @Override
+            public void run() {
+                List<String> data = new LinkedList<>();
+
+                try {
+                    while (true) {
+                        String poll = quotaQueue.pollTask(1000, TimeUnit.MILLISECONDS);
+
+                        if (poll == null) {
+                            continue;
+                        }
+
+                        data.add(poll);
+
+                        count++;
+
+                        if (begin == 0) {
+                            begin = System.currentTimeMillis();
+                        }
+
+                        if (count == 60000) {
+                            end = System.currentTimeMillis();
+                            break;
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                System.out.println("结束： " + (end - begin));
+
+                for (String d : data) {
+                    System.out.println(d);
+                }
+            }
+        });
+
+        threadPrint.start();
+
+        for (Data d : data) {
+            quotaQueue.put(d.name, d.data);
+        }
+
+        Thread.sleep(1 * 1000);
+    }
 }

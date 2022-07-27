@@ -2,6 +2,7 @@ package hello.designpatterns.quota.queue;
 
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -144,8 +145,8 @@ public class QuotaQueue1Test {
     }
 
     @Test
-    public void test3() throws InterruptedException {
-        QuotaQueue1<String> quotaQueue = new QuotaQueue1("abc", 100);
+    public void test4() throws InterruptedException {
+        QuotaQueue1<String> quotaQueue = new QuotaQueue1("abc", 1000);
 
         Queue<String> queue1 = quotaQueue.addQuota("a", 1, new LinkedBlockingDeque<>());
         Queue<String> queue2 = quotaQueue.addQuota("b", 1, new LinkedBlockingDeque<>());
@@ -160,18 +161,18 @@ public class QuotaQueue1Test {
         Queue<String> queue11 = quotaQueue.addQuota("k", 1, new LinkedBlockingDeque<>());
         Queue<String> queue12 = quotaQueue.addQuota("l", 1, new LinkedBlockingDeque<>());
 
-        Test3Runnable runnable1 = new Test3Runnable(quotaQueue, 5000 , "a", 1);
-        Test3Runnable runnable2 = new Test3Runnable(quotaQueue, 5000 , "b", 1);
-        Test3Runnable runnable3 = new Test3Runnable(quotaQueue, 5000 , "c", 1);
-        Test3Runnable runnable4 = new Test3Runnable(quotaQueue, 5000 , "d", 1);
-        Test3Runnable runnable5 = new Test3Runnable(quotaQueue, 5000 , "e", 1);
-        Test3Runnable runnable6 = new Test3Runnable(quotaQueue, 5000 , "f", 1);
-        Test3Runnable runnable7 = new Test3Runnable(quotaQueue, 5000 , "g", 1);
-        Test3Runnable runnable8 = new Test3Runnable(quotaQueue, 5000 , "h", 1);
-        Test3Runnable runnable9 = new Test3Runnable(quotaQueue, 5000 , "i", 1);
-        Test3Runnable runnable10 = new Test3Runnable(quotaQueue, 5000 , "j", 1);
-        Test3Runnable runnable11 = new Test3Runnable(quotaQueue, 5000 , "k", 1);
-        Test3Runnable runnable12 = new Test3Runnable(quotaQueue, 5000 , "l", 1);
+        Test4Runnable runnable1 = new Test4Runnable(quotaQueue, 5000 , "a", 1);
+        Test4Runnable runnable2 = new Test4Runnable(quotaQueue, 5000 , "b", 1);
+        Test4Runnable runnable3 = new Test4Runnable(quotaQueue, 5000 , "c", 1);
+        Test4Runnable runnable4 = new Test4Runnable(quotaQueue, 5000 , "d", 1);
+        Test4Runnable runnable5 = new Test4Runnable(quotaQueue, 5000 , "e", 1);
+        Test4Runnable runnable6 = new Test4Runnable(quotaQueue, 5000 , "f", 1);
+        Test4Runnable runnable7 = new Test4Runnable(quotaQueue, 5000 , "g", 1);
+        Test4Runnable runnable8 = new Test4Runnable(quotaQueue, 5000 , "h", 1);
+        Test4Runnable runnable9 = new Test4Runnable(quotaQueue, 5000 , "i", 1);
+        Test4Runnable runnable10 = new Test4Runnable(quotaQueue, 5000 , "j", 1);
+        Test4Runnable runnable11 = new Test4Runnable(quotaQueue, 5000 , "k", 1);
+        Test4Runnable runnable12 = new Test4Runnable(quotaQueue, 5000 , "l", 1);
 
         Thread thread1 = new Thread(runnable1);
         Thread thread2 = new Thread(runnable2);
@@ -247,13 +248,13 @@ public class QuotaQueue1Test {
         Thread.sleep(1 * 1000);
     }
 
-    private static class Test3Runnable implements Runnable {
+    private static class Test4Runnable implements Runnable {
         private QuotaQueue1<String> quotaQueue;
 
         private String name;
 
         private List<String> data = new LinkedList<>();
-        private Test3Runnable(QuotaQueue1<String> quotaQueue, int num, String name, int quota) {
+        private Test4Runnable(QuotaQueue1<String> quotaQueue, int num, String name, int quota) {
             this.quotaQueue = quotaQueue;
             this.name = name;
             String pre = name + "-quota" + quota + "-";
@@ -275,5 +276,76 @@ public class QuotaQueue1Test {
         }
     }
 
+    @Test
+    public void test5() throws InterruptedException {
+        List<Data> data = Data.data1(5000, Arrays.asList("l", "h", "d", "b", "c", "g", "a", "j", "i", "k", "f", "e"));
+
+        QuotaQueue1<String> quotaQueue = new QuotaQueue1("abc", 1000);
+
+        Queue<String> queue1 = quotaQueue.addQuota("a", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue2 = quotaQueue.addQuota("b", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue3 = quotaQueue.addQuota("c", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue4 = quotaQueue.addQuota("d", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue5 = quotaQueue.addQuota("e", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue6 = quotaQueue.addQuota("f", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue7 = quotaQueue.addQuota("g", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue8 = quotaQueue.addQuota("h", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue9 = quotaQueue.addQuota("i", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue10 = quotaQueue.addQuota("j", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue11 = quotaQueue.addQuota("k", 1, new LinkedBlockingDeque<>());
+        Queue<String> queue12 = quotaQueue.addQuota("l", 1, new LinkedBlockingDeque<>());
+
+        Thread threadPrint = new Thread(new Runnable() {
+            private int count;
+
+            private long begin;
+
+            private long end;
+
+            @Override
+            public void run() {
+                List<String> data = new LinkedList<>();
+
+                try {
+                    while (true) {
+                        String poll = quotaQueue.pollTask(1000, TimeUnit.MILLISECONDS);
+
+                        if (poll == null) {
+                            continue;
+                        }
+
+                        data.add(poll);
+
+                        count++;
+
+                        if (begin == 0) {
+                            begin = System.currentTimeMillis();
+                        }
+
+                        if (count == 60000) {
+                            end = System.currentTimeMillis();
+                            break;
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                System.out.println("结束： " + (end - begin));
+
+                for (String d : data) {
+                    System.out.println(d);
+                }
+            }
+        });
+
+        threadPrint.start();
+
+        for (Data d : data) {
+            quotaQueue.put(d.name, d.data);
+        }
+
+        Thread.sleep(1 * 1000);
+    }
 
 }
