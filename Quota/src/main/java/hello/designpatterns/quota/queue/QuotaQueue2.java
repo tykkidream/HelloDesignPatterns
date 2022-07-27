@@ -3,7 +3,6 @@ package hello.designpatterns.quota.queue;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.LockSupport;
@@ -122,10 +121,12 @@ public class QuotaQueue2<T> {
                 for (int i = 0; i < quotaRule.quota; i++) {
                     T task = quotaRule.queue.poll();
 
-                    if (task != null) {
-                        // 阻塞
-                        taskQueue.put(task);
+                    if (task == null) {
+                        break;
                     }
+
+                    // 阻塞
+                    taskQueue.put(task);
                 }
 
                 hasData = true;
@@ -137,11 +138,11 @@ public class QuotaQueue2<T> {
         }
     }
 
-    public T poll() {
+    public T pollTask() {
         return taskQueue.poll();
     }
 
-    public T poll(long timeout, TimeUnit timeUnit) throws InterruptedException {
+    public T pollTask(long timeout, TimeUnit timeUnit) throws InterruptedException {
         return taskQueue.poll(timeout, timeUnit);
     }
 

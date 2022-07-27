@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
 
 public class QuotaQueue1Test {
 
@@ -63,7 +64,7 @@ public class QuotaQueue1Test {
         quotaQueue.run();
 
         while (true) {
-            String poll = quotaQueue.poll();
+            String poll = quotaQueue.pollTask();
 
             if (poll == null) {
                 break;
@@ -126,10 +127,9 @@ public class QuotaQueue1Test {
         quotaQueue.put("d", "d-quota3-8");
         quotaQueue.put("d", "d-quota3-9");
 
-        Thread.sleep(300000);
 
         while (true) {
-            String poll = quotaQueue.poll();
+            String poll = quotaQueue.pollTask(1000, TimeUnit.MILLISECONDS);
 
             if (poll == null) {
                 break;
@@ -137,5 +137,7 @@ public class QuotaQueue1Test {
 
             System.out.println(poll);
         }
+
+        Thread.sleep(300000);
     }
 }

@@ -70,7 +70,7 @@ public class QuotaQueue2Test {
         quotaQueue.put("d", "d-quota3-9");
 
         while (true) {
-            String poll = quotaQueue.poll(1000L, TimeUnit.MILLISECONDS);
+            String poll = quotaQueue.pollTask(1000L, TimeUnit.MILLISECONDS);
 
             if (poll == null) {
                 break;

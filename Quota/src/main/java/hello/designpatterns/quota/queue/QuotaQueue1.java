@@ -52,6 +52,8 @@ public class QuotaQueue1<T> {
         public void run() {
             while (!quotaShapingThread.isInterrupted()) {
                 try {
+                    System.out.println("run 中");
+
                     QuotaQueue1.this.run();
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
@@ -94,6 +96,8 @@ public class QuotaQueue1<T> {
 
         int in = quotaRule.in.incrementAndGet();
 
+        quotaRule.queue.put(element);
+
         if (in > 1) {
             return;
         }
@@ -129,34 +133,42 @@ public class QuotaQueue1<T> {
             QuotaRule quotaRule = null;
 
             if (timeout <= 0) {
+                System.out.println("poll 中");
                 quotaRule = taskQueues.poll();
             } else {
-                    quotaRule = taskQueues.poll(timeout, unit);
-
+                System.out.println("poll timeout 中");
+                quotaRule = taskQueues.poll(timeout, unit);
             }
 
+            System.out.println("poll 处理 中");
+
             if (quotaRule == null) {
+                System.out.println("poll false of null");
+                return false;
+            }
+
+            int in = quotaRule.in.get();
+
+            if (in == 0) {
+                System.out.println("poll false of 0");
                 return false;
             }
 
             if (quotaRule.queue.isEmpty()) {
-                int in = quotaRule.in.get();
-                synchronized (quotaRule) {
-                    if (quotaRule.queue.isEmpty()) {
-                        boolean set = quotaRule.in.compareAndSet(in, 0);
-                        if (set) {
-                            return false;
-                        }
-                    }
+                if (quotaRule.in.compareAndSet(in, 0)) {
+                    System.out.println("poll false of empty");
+                    return false;
                 }
             }
 
             for (int i = 0; i < quotaRule.quota; i++) {
                 T task = quotaRule.queue.poll();
 
-                if (task != null) {
-                    taskQuotaQueue.put(task);
+                if (task == null) {
+                    break;
                 }
+
+                taskQuotaQueue.put(task);
             }
 
             // 此时，quotaRule.quota 只可能有 0 个数据，也要将其添加到 taskQueueRounds 中一次。
@@ -167,7 +179,6 @@ public class QuotaQueue1<T> {
 
             quotaRule.in.set(2);
 
-
             return true;
         } catch (InterruptedException e) {
             throwException(e);
@@ -175,8 +186,12 @@ public class QuotaQueue1<T> {
         }
     }
 
-    public T poll() {
+    public T pollTask() {
         return taskQuotaQueue.poll();
+    }
+
+    public T pollTask(long timeout, TimeUnit timeUnit) throws InterruptedException {
+        return taskQuotaQueue.poll(timeout, timeUnit);
     }
 
     private class QuotaRule {
@@ -187,6 +202,8 @@ public class QuotaQueue1<T> {
         private BlockingQueue<T> queue;
 
         private AtomicInteger in = new AtomicInteger(0);
+
+        private AtomicInteger inPrevious = new AtomicInteger(0);
     }
 
 }
