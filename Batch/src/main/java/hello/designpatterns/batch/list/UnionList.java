@@ -2,7 +2,12 @@ package hello.designpatterns.batch.list;
 
 import java.util.*;
 
-public class UnionList<K, D> implements List<D>, Cloneable, java.io.Serializable{
+/**
+ * 可以将多个 List 联合成一个 List 来使用，实际还是各自分开的 List 。
+ * @param <K>
+ * @param <D>
+ */
+public class UnionList<K, D> implements List<D>, Cloneable, java.io.Serializable {
     private Map<K, List<D>> allData;
 
     private List<D> lastData;
