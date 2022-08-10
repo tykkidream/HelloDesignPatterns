@@ -31,13 +31,15 @@ public class TwoTuple<A, B> extends OneTuple<A> {
     }
 
     public static <A, B, DATA extends TwoTuple<A, B>> List<B> bList(List<DATA> twoTuples) {
-        List<B> data = new ArrayList<>(twoTuples.size());
+        return bList(twoTuples, new ArrayList<>(twoTuples.size()));
+    }
 
+    public static <A, B, DATA extends TwoTuple<A, B>> List<B> bList(List<DATA> twoTuples, List<B> list) {
         for (DATA twoTuple : twoTuples) {
-            data.add(twoTuple.b);
+            list.add(twoTuple.b);
         }
 
-        return data;
+        return list;
     }
 
     public B getB() {

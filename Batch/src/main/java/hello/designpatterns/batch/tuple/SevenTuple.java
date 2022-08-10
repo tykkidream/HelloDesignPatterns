@@ -16,13 +16,15 @@ public class SevenTuple<A, B, C, D, E, F, G> extends SixTuple<A, B, C, D, E, F> 
     }
 
     public static <A, B, C, D, E, F, G, DATA extends SevenTuple<A, B, C, D, E, F, G>> List<G> gList(List<DATA> sevenTuples) {
-        List<G> data = new ArrayList<>(sevenTuples.size());
+        return gList(sevenTuples, new ArrayList<>(sevenTuples.size()));
+    }
 
+    public static <A, B, C, D, E, F, G, DATA extends SevenTuple<A, B, C, D, E, F, G>> List<G> gList(List<DATA> sevenTuples, List<G> list) {
         for (DATA sevenTuple : sevenTuples) {
-            data.add(sevenTuple.g);
+            list.add(sevenTuple.g);
         }
 
-        return data;
+        return list;
     }
 
     public G getG() {

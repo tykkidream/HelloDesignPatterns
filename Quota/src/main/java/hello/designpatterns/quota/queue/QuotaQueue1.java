@@ -107,6 +107,32 @@ public class QuotaQueue1<T> {
     }
 
     /**
+     * 与 {@link #run()} 接口有并发问题。
+     * @param name
+     * @param element
+     * @throws InterruptedException
+     */
+    public boolean offer(String name, T element) {
+        QuotaRule quotaRule = quotaRules.get(name);
+
+        int in = quotaRule.in.incrementAndGet();
+
+        boolean offer = quotaRule.queue.offer(element);
+
+        if (!offer) {
+            return false;
+        }
+
+        if (in > 1) {
+            synchronized (quotaRule) {
+                taskQueues.add(quotaRule);
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * 与 {@link #put(String, Object)} 接口有并发问题。
      */
     public void run() {

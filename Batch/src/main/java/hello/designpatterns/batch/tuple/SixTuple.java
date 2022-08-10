@@ -16,13 +16,15 @@ public class SixTuple<A, B, C, D, E, F> extends FiveTuple<A, B, C, D, E> {
     }
 
     public static <A, B, C, D, E, F, DATA extends SixTuple<A, B, C, D, E, F>> List<F> fList(List<DATA> sixTuples) {
-        List<F> data = new ArrayList<>(sixTuples.size());
+        return fList(sixTuples, new ArrayList<>(sixTuples.size()));
+    }
 
+    public static <A, B, C, D, E, F, DATA extends SixTuple<A, B, C, D, E, F>> List<F> fList(List<DATA> sixTuples, List<F> list) {
         for (DATA sixTuple : sixTuples) {
-            data.add(sixTuple.f);
+            list.add(sixTuple.f);
         }
 
-        return data;
+        return list;
     }
 
     public F getF() {

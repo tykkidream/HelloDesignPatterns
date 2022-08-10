@@ -28,14 +28,15 @@ public class OneTuple<A>{
         return Objects.hash(a);
     }
 
-    public static <A, B, DATA extends TwoTuple<A, B>> List<A> aList(List<DATA> twoTuples) {
-        List<A> data = new ArrayList<>(twoTuples.size());
-
-        for (DATA twoTuple : twoTuples) {
-            data.add(twoTuple.a);
+    public static <A, DATA extends OneTuple<A>> List<A> aList(List<DATA> oneTuples) {
+        return aList(oneTuples, new ArrayList<>(oneTuples.size()));
+    }
+    public static <A, DATA extends OneTuple<A>> List<A> aList(List<DATA> oneTuples, List<A> list) {
+        for (DATA oneTuple : oneTuples) {
+            list.add(oneTuple.a);
         }
 
-        return data;
+        return list;
     }
 
     public A get() {

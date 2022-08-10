@@ -16,13 +16,15 @@ public class FourTuple<A, B, C, D> extends ThreeTuple<A, B, C> {
     }
 
     public static <A, B, C, D, DATA extends FourTuple<A, B, C, D>> List<D> dList(List<DATA> fourTuples) {
-        List<D> data = new ArrayList<>(fourTuples.size());
+        return dList(fourTuples, new ArrayList<>(fourTuples.size()));
+    }
 
+    public static <A, B, C, D, DATA extends FourTuple<A, B, C, D>> List<D> dList(List<DATA> fourTuples, List<D> list) {
         for (DATA threeTuple : fourTuples) {
-            data.add(threeTuple.d);
+            list.add(threeTuple.d);
         }
 
-        return data;
+        return list;
     }
 
     public D getD() {
