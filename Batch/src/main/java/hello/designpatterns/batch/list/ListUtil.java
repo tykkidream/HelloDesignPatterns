@@ -2,6 +2,7 @@ package hello.designpatterns.batch.list;
 
 import hello.designpatterns.batch.function.TeConsumer;
 import hello.designpatterns.batch.tuple.ThreeTuple;
+import hello.designpatterns.batch.tuple.TwoTuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -140,8 +141,8 @@ public class ListUtil {
 		return null;
 	}
 
-	public static <T> void iterateRemove(List<T> datas, Predicate<T> predicate, BiConsumer<T, Throwable> throwableConsumer) {
-		iterateRemove(datas, predicate, throwableConsumer, null);
+	public static <T> List<T> iterateRemove(List<T> datas, Predicate<T> predicate, BiConsumer<T, Throwable> throwableConsumer) {
+		return iterateRemove(datas, predicate, throwableConsumer, null);
 	}
 
 	public static <T> List<T> iterateRemove(List<T> datas, Predicate<T> predicate, BiConsumer<T, Throwable> throwableConsumer, List<T> removeList) {
@@ -277,6 +278,16 @@ public class ListUtil {
 
 			return comparator.compare(k1, k2);
 		}, leftSetter);
+	}
+	public static <E, D> List<TwoTuple<E, D>> leftJoin(List<E> leftList, List<D> rightList, DiffComparator<E, D> comparator) {
+		LinkedList<TwoTuple<E, D>> result = new LinkedList<>();
+		leftJoin(leftList, rightList, comparator, result);
+		return result;
+	}
+
+	public static <E, D> void leftJoin(List<E> leftList, List<D> rightList, DiffComparator<E, D> comparator, List<TwoTuple<E, D>> result) {
+		BiConsumer<E, D> leftSetter = (a, b) -> result.add(new TwoTuple<>(a, b));
+		leftJoin(leftList, rightList, comparator, leftSetter);
 	}
 
 	public static <E, D> void leftJoin(List<E> leftList, List<D> rightList, DiffComparator<E, D> comparator, BiConsumer<E, D> leftSetter) {
