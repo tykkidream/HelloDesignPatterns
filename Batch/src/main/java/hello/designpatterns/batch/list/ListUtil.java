@@ -1,7 +1,6 @@
 package hello.designpatterns.batch.list;
 
 import hello.designpatterns.batch.function.TeConsumer;
-import hello.designpatterns.batch.tuple.ThreeTuple;
 import hello.designpatterns.batch.tuple.TwoTuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -190,15 +189,6 @@ public class ListUtil {
 		return removeList;
 	}
 
-	public static <A, E, D> List<ThreeTuple<A, E, D>> leftJoin(WrapList<E, A> leftList, WrapList<D, A> rightList) {
-		return leftJoin(leftList, rightList, new LinkedList<>());
-	}
-
-	public static <A, E, D> List<ThreeTuple<A, E, D>> leftJoin(WrapList<E, A> leftList, WrapList<D, A> rightList, List<ThreeTuple<A, E, D>> result) {
-		leftJoin(leftList, rightList, (o1, o2) -> o1.equals(o2) ? 0 : 1, (a, e, d) -> result.add(new ThreeTuple<>(a, e, d)));
-		return result;
-	}
-
 	public static <A, E, D> void leftJoin(WrapList<E, A> leftList, WrapList<D, A> rightList, BiConsumer<E, D> attributeSetter) {
 		leftJoin(leftList, rightList, (o1, o2) -> o1.equals(o2) ? 0 : 1, (a,e,d) -> attributeSetter.accept(e,d));
 	}
@@ -279,15 +269,11 @@ public class ListUtil {
 			return comparator.compare(k1, k2);
 		}, leftSetter);
 	}
-	public static <E, D> List<TwoTuple<E, D>> leftJoin(List<E> leftList, List<D> rightList, DiffComparator<E, D> comparator) {
-		LinkedList<TwoTuple<E, D>> result = new LinkedList<>();
-		leftJoin(leftList, rightList, comparator, result);
-		return result;
-	}
 
-	public static <E, D> void leftJoin(List<E> leftList, List<D> rightList, DiffComparator<E, D> comparator, List<TwoTuple<E, D>> result) {
-		BiConsumer<E, D> leftSetter = (a, b) -> result.add(new TwoTuple<>(a, b));
-		leftJoin(leftList, rightList, comparator, leftSetter);
+	public static <E, D> List<TwoTuple<E, D>> leftJoin(List<E> leftList, List<D> rightList, DiffComparator<E, D> comparator) {
+		List<TwoTuple<E, D>> twoTuples = convertWithLinkedList(leftList, a -> new TwoTuple(a, null));
+		leftJoin(twoTuples, rightList, (a,b) -> comparator.compare(a.a, b), TwoTuple::setB);
+		return twoTuples;
 	}
 
 	public static <E, D> void leftJoin(List<E> leftList, List<D> rightList, DiffComparator<E, D> comparator, BiConsumer<E, D> leftSetter) {
