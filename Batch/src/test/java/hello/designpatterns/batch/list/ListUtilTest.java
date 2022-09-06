@@ -36,13 +36,13 @@ public class ListUtilTest {
 		WrapList<Person, Long> list1 = WrapList.wrap(persons1, Person::getId, Person::setId);
 		WrapList<Person, Long> list2 = WrapList.wrap(persons2, Person::getId, Person::setId);
 
-		List<ThreeTuple<Long, Person, Person>> result = ListUtil.leftJoin(list1, list2);
+/*		List<ThreeTuple<Long, Person, Person>> result = ListUtil.leftJoin(list1, list2);
 
 		System.out.println(JSON.toJSONString(list1));
 		System.out.println(JSON.toJSONString(persons1));
 		System.out.println(JSON.toJSONString(list2));
 		System.out.println(JSON.toJSONString(persons2));
-		System.out.println(JSON.toJSONString(result));
+		System.out.println(JSON.toJSONString(result));*/
 	}
 
 	@Test

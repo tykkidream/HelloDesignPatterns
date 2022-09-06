@@ -190,7 +190,8 @@ public class ListUtil {
 	}
 
 	public static <A, E, D> void leftJoin(WrapList<E, A> leftList, WrapList<D, A> rightList, BiConsumer<E, D> attributeSetter) {
-		leftJoin(leftList, rightList, (o1, o2) -> o1.equals(o2) ? 0 : 1, (a,e,d) -> attributeSetter.accept(e,d));
+		TeConsumer<A, E, D> teConsumer = (a,e,d) -> attributeSetter.accept(e,d);
+		leftJoin(leftList, rightList, (o1, o2) -> o1.equals(o2) ? 0 : 1, teConsumer);
 	}
 
 	public static <A, E, D> void leftJoin(WrapList<E, A> leftList, WrapList<D, A> rightList, Comparator<A> comparator, TeConsumer<A, E, D> attributeSetter) {
@@ -252,6 +253,20 @@ public class ListUtil {
 		}
 	}
 
+	/**
+	 * 参数太多，使用麻烦。没有使用价值。
+	 *
+	 * @param leftList
+	 * @param rightList
+	 * @param leftGetter
+	 * @param rightGetter
+	 * @param leftSetter
+	 * @param comparator
+	 * @param <A>
+	 * @param <E>
+	 * @param <D>
+	 */
+	@Deprecated
 	public static <A, E, D> void leftJoin(List<E> leftList, List<D> rightList,
 										  Function<E, A> leftGetter, Function<D, A> rightGetter,
 										  BiConsumer<E, D> leftSetter, Comparator<A> comparator) {
@@ -270,13 +285,49 @@ public class ListUtil {
 		}, leftSetter);
 	}
 
+	/**
+	 * 常规 List 关联处理。
+	 *
+	 * @param leftList
+	 * @param rightList
+	 * @param comparator
+	 * @return
+	 * @param <E>
+	 * @param <D>
+	 */
 	public static <E, D> List<TwoTuple<E, D>> leftJoin(List<E> leftList, List<D> rightList, DiffComparator<E, D> comparator) {
 		List<TwoTuple<E, D>> twoTuples = convertWithLinkedList(leftList, a -> new TwoTuple(a, null));
 		leftJoin(twoTuples, rightList, (a,b) -> comparator.compare(a.a, b), TwoTuple::setB);
 		return twoTuples;
 	}
 
+	/**
+	 * 常规 List 关联处理。
+	 *
+	 * @param leftList
+	 * @param rightList
+	 * @param comparator
+	 * @param leftSetter
+	 * @param <E>
+	 * @param <D>
+	 */
 	public static <E, D> void leftJoin(List<E> leftList, List<D> rightList, DiffComparator<E, D> comparator, BiConsumer<E, D> leftSetter) {
+		TeConsumer<E, D, Iterator<E>> teConsumer = (a, b, i) -> leftSetter.accept(a, b);
+
+		leftJoin(leftList, rightList, comparator, teConsumer);
+	}
+
+	/**
+	 * 常规 List 关联处理。
+	 *
+	 * @param leftList
+	 * @param rightList
+	 * @param comparator
+	 * @param leftSetter
+	 * @param <E>
+	 * @param <D>
+	 */
+	public static <E, D> void leftJoin(List<E> leftList, List<D> rightList, DiffComparator<E, D> comparator, TeConsumer<E, D, Iterator<E>> leftSetter) {
 		if (leftList == null || leftList.isEmpty() || rightList == null || rightList.isEmpty() || comparator == null) {
 			return;
 		}
@@ -301,7 +352,7 @@ public class ListUtil {
 				} else if (compare > 0) {
 					break B;
 				} else {
-					leftSetter.accept(leftItem, rightItem);
+					leftSetter.accept(leftItem, rightItem, leftIterator);
 					rightIterator.markRingStartingPoint();
 					rightItem = null;
 					continue A;
@@ -319,7 +370,7 @@ public class ListUtil {
 				} else if (compare > 0) {
 					continue C;
 				} else {
-					leftSetter.accept(leftItem, rightItem);
+					leftSetter.accept(leftItem, rightItem, leftIterator);
 					break C;
 				}
 			}
