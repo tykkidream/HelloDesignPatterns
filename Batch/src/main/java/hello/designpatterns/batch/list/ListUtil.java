@@ -353,9 +353,8 @@ public class ListUtil {
 					break B;
 				} else {
 					leftSetter.accept(leftItem, rightItem, leftIterator);
-					rightIterator.markRingStartingPoint();
+					rightIterator.markRingStartingPoint(-1);
 					rightItem = null;
-					continue A;
 				}
 			}
 
@@ -371,11 +370,10 @@ public class ListUtil {
 					continue C;
 				} else {
 					leftSetter.accept(leftItem, rightItem, leftIterator);
-					break C;
 				}
 			}
 
-			rightIterator.markRingStartingPoint();
+			rightIterator.markRingStartingPoint(-1);
 		}
 	}
 }

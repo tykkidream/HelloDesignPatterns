@@ -101,4 +101,97 @@ public class ListUtilTest {
 
 		System.out.println(JSON.toJSON(list1));
 	}
+
+	/**
+	 * 测试一对多。
+	 *
+	 * list1 和 list2 都是已排序好的。
+	 */
+	@Test
+	public void test4() {
+		List<ThreeTuple<Integer, String, Data>> list1 = new LinkedList();
+
+		{
+			list1.add(new ThreeTuple<>(1, "a", null));
+			list1.add(new ThreeTuple<>(2, "b", null));
+			list1.add(new ThreeTuple<>(3, "c", null));
+			list1.add(new ThreeTuple<>(4, "d", null));
+		}
+
+		List<Data> list2 = new LinkedList<>();
+
+		{
+			list2.add(new Data(2, "a"));
+			list2.add(new Data(2, "b"));
+			list2.add(new Data(4, "a"));
+			list2.add(new Data(4, "b"));
+			list2.add(new Data(4, "c"));
+		}
+
+		ListUtil.leftJoin(list1,  list2, (a, b) -> a.getA().compareTo(b.getV1()), (a, b, i) ->{
+			System.out.println(">>> " + a.getB() + " : " + b.getV2());
+		});
+	}
+
+	/**
+	 * 测试一对多。
+	 *
+	 * list1 是已排序好的，list2 是未排序的。
+	 */
+	@Test
+	public void test5() {
+		List<ThreeTuple<Integer, String, Data>> list1 = new LinkedList();
+
+		{
+			list1.add(new ThreeTuple<>(1, "a", null));
+			list1.add(new ThreeTuple<>(2, "b", null));
+			list1.add(new ThreeTuple<>(3, "c", null));
+			list1.add(new ThreeTuple<>(4, "d", null));
+		}
+
+		List<Data> list2 = new LinkedList<>();
+
+		{
+			list2.add(new Data(4, "c"));
+			list2.add(new Data(2, "b"));
+			list2.add(new Data(4, "a"));
+			list2.add(new Data(2, "a"));
+			list2.add(new Data(4, "b"));
+		}
+
+		ListUtil.leftJoin(list1,  list2, (a, b) -> a.getA().compareTo(b.getV1()), (a, b, i) ->{
+			System.out.println(">>> " + a.getB() + " : " + b.getV2());
+		});
+	}
+
+	/**
+	 * 测试一对多。
+	 *
+	 * list1 是已排序好的，list2 是未排序的。
+	 */
+	@Test
+	public void test6() {
+		List<ThreeTuple<Integer, String, Data>> list1 = new LinkedList();
+
+		{
+			list1.add(new ThreeTuple<>(1, "a", null));
+			list1.add(new ThreeTuple<>(2, "b", null));
+			list1.add(new ThreeTuple<>(3, "c", null));
+			list1.add(new ThreeTuple<>(4, "d", null));
+		}
+
+		List<Data> list2 = new LinkedList<>();
+
+		{
+			list2.add(new Data(4, "c"));
+			list2.add(new Data(2, "b"));
+			list2.add(new Data(4, "a"));
+			list2.add(new Data(2, "a"));
+			list2.add(new Data(4, "b"));
+		}
+
+		/*ListUtil.leftJoin(list1,  list2, ListUtil.n1tn2((a, b) -> a.getA().compareTo(b.getV1())), (a, b, i) ->{
+			System.out.println(">>> " + a.getB() + " : " + b.getV2());
+		});*/
+	}
 }

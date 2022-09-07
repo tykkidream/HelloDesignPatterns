@@ -33,11 +33,15 @@ public class ForwardIterator<E> implements ListIterator<E> {
     }
 
     public void markRingStartingPoint() {
+        markRingStartingPoint(0);
+    }
+
+    public void markRingStartingPoint(int magic) {
         if (cursor == size()) {
             this.cursor = size() -1;
         }
 
-        this.ringStartingPoint = this.cursor;
+        this.ringStartingPoint = this.cursor + magic;
     }
 
     protected int lastRet() {
