@@ -16,7 +16,17 @@ public class ListUtil {
 			return Collections.EMPTY_LIST;
 		}
 
-		List list = new LinkedList();
+		return convert(datas, function, new LinkedList<>());
+	}
+
+	public static <T, P> List<P> convert(List<T> datas, Function<T, P> function, List<P> list) {
+		if (datas == null || datas.isEmpty()) {
+			return null;
+		}
+
+		if (list == null) {
+			return null;
+		}
 
 		for (T data : datas) {
 			if (data == null) {
