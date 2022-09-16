@@ -21,7 +21,7 @@ public class ListUtil {
 
 	public static <T, P> List<P> convert(List<T> datas, Function<T, P> function, List<P> list) {
 		if (datas == null || datas.isEmpty()) {
-			return null;
+			return list;
 		}
 
 		if (list == null) {
