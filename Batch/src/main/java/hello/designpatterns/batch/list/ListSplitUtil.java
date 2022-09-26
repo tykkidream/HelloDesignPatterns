@@ -55,11 +55,52 @@ public class ListSplitUtil {
         List<List<T>> result = new LinkedList<>();
 
         // 若原 list 大小为0，则直接返回
-        if(source.size() == 0){
+        if(source.size() <= subSize){
+            result.add(source);
             return result;
         }
 
         int totalSize = source.size();
+        int offset = 0;
+        int end = 0;
+
+        while (true) {
+            end = offset + subSize;
+
+            if (end > totalSize) {
+                end = totalSize;
+            }
+
+            List<T> subList = source.subList(offset, end);
+
+            result.add(subList);
+
+            if (end >= totalSize) {
+                break;
+            }
+
+            offset = end + 1;
+        }
+
+        return result;
+    }
+
+    public static <T> List<List<T>> balanceAssign(List<T> source, int subSize) {
+        List<List<T>> result = new LinkedList<>();
+
+        // 若原 list 大小为0，则直接返回
+        if(source.size() <= subSize){
+            result.add(source);
+            return result;
+        }
+
+        int totalSize = source.size();
+
+        if (totalSize % subSize > 0) {
+            int partitions = totalSize / subSize + 1;
+            subSize = totalSize / partitions + 1;
+        }
+
         int offset = 0;
         int end = 0;
 
@@ -123,4 +164,13 @@ public class ListSplitUtil {
         }
     }
 
+    public static <T> void balanceAssignBatchProcessing(List<T> data, int subSize, SplitBatchProcessingHandler<T> splitBatchProcessingHandler) {
+        if (data.size() == 0) {
+            return;
+        }
+
+        for (List<T> subData : balanceAssign(data, subSize)) {
+            splitBatchProcessingHandler.doHandle(subData);
+        }
+    }
 }
