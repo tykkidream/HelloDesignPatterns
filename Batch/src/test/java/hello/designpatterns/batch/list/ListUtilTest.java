@@ -194,4 +194,67 @@ public class ListUtilTest {
 			System.out.println(">>> " + a.getB() + " : " + b.getV2());
 		});*/
 	}
+
+	/**
+	 *
+	 *
+	 *
+	 */
+	@Test
+	public void test7() {
+		List<ThreeTuple<Integer, String, Data>> list1 = new LinkedList();
+
+		{
+			list1.add(new ThreeTuple<>(0, "a", null));
+			list1.add(new ThreeTuple<>(2, "b", null));
+			list1.add(new ThreeTuple<>(4, "c", null));
+			list1.add(new ThreeTuple<>(5, "d", null));
+		}
+
+		List<Data> list2 = new LinkedList<>();
+
+		{
+			list2.add(new Data(1, "c"));
+			list2.add(new Data(2, "c"));
+			list2.add(new Data(2, "b"));
+			list2.add(new Data(3, "a"));
+			list2.add(new Data(4, "a"));
+			list2.add(new Data(4, "a"));
+		}
+
+		ListUtil.leftJoin(list1,  list2, (a, b) -> a.getA().compareTo(b.getV1()), (a, b, i) ->{
+			System.out.println(">>> " + a.getA() + " : " + b.getV1());
+		});
+	}
+
+	/**
+	 *
+	 *
+	 *
+	 */
+	@Test
+	public void test8() {
+		List<ThreeTuple<Integer, String, Data>> list1 = new LinkedList();
+
+		{
+			list1.add(new ThreeTuple<>(8128573, "8128573", null));
+			list1.add(new ThreeTuple<>(8128580, "8128580", null));
+			list1.add(new ThreeTuple<>(8133587, "8133587", null));
+			list1.add(new ThreeTuple<>(8134833, "8134833", null));
+			list1.add(new ThreeTuple<>(8484043, "8484043", null));
+			list1.add(new ThreeTuple<>(8484077, "8484077", null));
+		}
+
+		List<Data> list2 = new LinkedList<>();
+
+		{
+			list2.add(new Data(8128573, "8128573"));
+			list2.add(new Data(8134833, "8134833-1"));
+			list2.add(new Data(8134835, "8134833-2"));
+		}
+
+		ListUtil.leftJoin(list1,  list2, (a, b) -> a.getA().compareTo(b.getV1()), (a, b, i) ->{
+			System.out.println(">>> " + a.getA() + " : " + b.getV1());
+		});
+	}
 }

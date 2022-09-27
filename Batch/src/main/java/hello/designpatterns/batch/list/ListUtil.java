@@ -363,8 +363,13 @@ public class ListUtil {
 					break B;
 				} else {
 					leftSetter.accept(leftItem, rightItem, leftIterator);
-					rightIterator.markRingStartingPoint(-1);
-					rightItem = null;
+
+					if (rightIterator.hasNext()) {
+						rightIterator.markRingStartingPoint(-1);
+						rightItem = null;
+					} else {
+						continue A;
+					}
 				}
 			}
 
