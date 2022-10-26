@@ -105,7 +105,7 @@ public class ListSplitUtil {
         int end = 0;
 
         while (true) {
-            end = offset + subSize;
+            end = offset + subSize - 1;
 
             if (end > totalSize) {
                 end = totalSize;
@@ -119,7 +119,7 @@ public class ListSplitUtil {
                 break;
             }
 
-            offset = end + 1;
+            offset = end;
         }
 
         return result;
