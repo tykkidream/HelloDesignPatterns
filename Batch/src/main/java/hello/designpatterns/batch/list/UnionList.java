@@ -8,6 +8,26 @@ import java.util.*;
  * @param <D>
  */
 public class UnionList<K, D> implements List<D>, Cloneable, java.io.Serializable {
+    private static abstract class UnionListData {
+
+    }
+
+    private static abstract class UnionListHashMapData {
+
+    }
+    private static abstract class UnionListLinkedListData {
+
+    }
+
+    public static <D> UnionList<Object, D> union(List<D>... lists) {
+        UnionList<Object, D> list = new UnionList<>(lists.length);
+        for (List<D> d : lists) {
+            list.put(d, d);
+        }
+        return list;
+    }
+
+
     private Map<K, List<D>> allData;
 
     private List<D> lastData;
